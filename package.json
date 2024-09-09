@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "start": "serve -s dist",
+    "start": "serve -s dist -l 3005",
     "preview": "vite preview",
     "lint": "npx eslint",
     "lint:fix": "npx eslint --fix",
