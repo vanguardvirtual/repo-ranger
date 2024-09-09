@@ -85,6 +85,9 @@ export const searchUsernames = async (req: Request, res: Response) => {
     where: {
       username: Like(`%${query}%`),
     },
+    order: {
+      score: 'DESC',
+    },
   });
 
   const usernamesWithEmoji = await Promise.all(
