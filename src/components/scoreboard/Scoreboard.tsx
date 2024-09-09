@@ -104,7 +104,6 @@ const Scoreboard = () => {
           <thead>
             <tr>
               <th className="border border-gray-300 p-2 text-left">Username</th>
-              <th className="border border-gray-300 p-2 text-left">Contributions</th>
               <th className="border border-gray-300 p-2 text-left">Fav Lang</th>
               <th className="border border-gray-300 p-2 text-left">Location</th>
               <th className="border border-gray-300 p-2 text-left">Score</th>
@@ -116,7 +115,6 @@ const Scoreboard = () => {
             {users?.map((user: IUser) => (
               <tr key={user.username}>
                 <td className="border border-gray-300 p-2">{user.username}</td>
-                <td className="border border-gray-300 p-2">{user.contributions}</td>
                 <td className="border border-gray-300 p-2">{user.fav_language}</td>
                 <td className="border border-gray-300 p-2">{user.location}</td>
                 <td className="border border-gray-300 p-2">{user.score}</td>
