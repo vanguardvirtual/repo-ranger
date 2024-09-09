@@ -21,7 +21,7 @@ const Header = () => {
       </p>
       <p className="mb-4">
         Repo-Ranger is an AI-powered Github leaderboard that has no AI. It analyzes your Github activity and based on your score you win a
-        clap <span className="text-2xl">👏</span> or a <span className="text-2xl">💩</span>.
+        clap <span className="text-2xl">👏</span> or a <span className="text-2xl">💩</span>. Top 10 will get 🌟
       </p>
       <p className="mb-2">How we calculate your score?</p>
       <p>
