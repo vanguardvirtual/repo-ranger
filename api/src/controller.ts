@@ -2,6 +2,7 @@ import { Username } from '@/model';
 import { retrieveGithubInformation } from '@/service';
 import { Request, Response } from 'express';
 import { getEmoji } from '@/service';
+import { ILike, Like } from 'typeorm';
 
 export const createUsername = async (req: Request, res: Response) => {
   const { username } = req.body;
@@ -14,7 +15,7 @@ export const createUsername = async (req: Request, res: Response) => {
 
   const { score, country, favoriteLanguage, contributions, status, name, bio, avatar } = await retrieveGithubInformation(username);
 
-  if (status === 404) {
+  if (status == 404) {
     return res.status(404).json({
       message: 'User not found',
     });
@@ -53,6 +54,12 @@ export const getUsernames = async (req: Request, res: Response) => {
 };
 
 export const getUsernameById = async (req: Request, res: Response) => {
+  if (!req.params.id) {
+    return res.status(400).json({
+      message: 'Id is required',
+    });
+  }
+
   const username = await Username.findOne({ where: { id: Number(req.params.id) } });
 
   if (!username) {
@@ -68,6 +75,27 @@ export const getUsernameById = async (req: Request, res: Response) => {
       ...username,
       emoji,
     },
+  });
+};
+
+export const searchUsernames = async (req: Request, res: Response) => {
+  const { query } = req.query;
+
+  const usernames = await Username.find({
+    where: {
+      username: Like(`%${query}%`),
+    },
+  });
+
+  const usernamesWithEmoji = await Promise.all(
+    usernames.map(async (username) => ({
+      ...username,
+      emoji: await getEmoji(username.score),
+    })),
+  );
+
+  res.json({
+    usernames: usernamesWithEmoji,
   });
 };
 

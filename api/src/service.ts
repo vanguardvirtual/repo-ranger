@@ -92,7 +92,7 @@ export const retrieveGithubInformation = async (
       country: 'Unknown',
       favoriteLanguage: 'Unknown',
       contributions: 0,
-      status: 500,
+      status: 404,
       bio: '',
       avatar: '',
       name: '',

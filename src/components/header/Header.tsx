@@ -11,6 +11,13 @@ const Header = () => {
         <a href="https://x.com/sotergreco" target="_blank" rel="noopener noreferrer">
           @sotergreco
         </a>
+        {' - '}
+        <span>
+          Find the code for this project on{' '}
+          <a href="https://github.com/vanguardvirtual/repo-ranger" target="_blank" rel="noopener noreferrer">
+            Github
+          </a>
+        </span>
       </p>
       <p className="mb-4">
         Repo-Ranger is an AI-powered Github leaderboard that has no AI. It analyzes your Github activity and based on your score you win a
