@@ -86,7 +86,7 @@ export const retrieveGithubInformation = async (
       name: userData.name || '',
     };
   } catch (error) {
-    console.error('Error retrieving GitHub information for user:', username);
+    console.error('Error retrieving GitHub information for user:', username, error);
     return {
       score: 0,
       country: 'Unknown',

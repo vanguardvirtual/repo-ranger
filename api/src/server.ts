@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { Request } from 'express';
+import express from 'express';
 import 'dotenv/config';
 import { router } from '@/routes';
 import 'reflect-metadata';

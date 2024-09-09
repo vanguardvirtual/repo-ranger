@@ -8,8 +8,8 @@ interface DetailsProps {
   onClose: () => void;
 }
 
-const Details: React.FC<DetailsProps> = ({ user: userData, onClose }) => {
-  const { data, isLoading, error } = useGetGitHubUserData(userData.username);
+const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
+  const { data, isLoading, error } = useGetGitHubUserData(user.username);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';

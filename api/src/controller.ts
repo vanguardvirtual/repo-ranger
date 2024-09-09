@@ -2,7 +2,7 @@ import { Username } from '@/model';
 import { retrieveGithubInformation } from '@/service';
 import { Request, Response } from 'express';
 import { getEmoji } from '@/service';
-import { ILike, Like } from 'typeorm';
+import { Like } from 'typeorm';
 
 export const createUsername = async (req: Request, res: Response) => {
   const { username } = req.body;

@@ -1,0 +1,8 @@
+#!/bin/sh
+npx eslint --max-warnings=0 . || {
+  echo "ESLint check failed. Commit aborted."
+  exit 1
+}
+
+npx prettier --write .
+git update-index --again

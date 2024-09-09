@@ -1,4 +1,3 @@
-import { getEmoji } from '@/service';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity } from 'typeorm';
 
 @Entity('usernames')
