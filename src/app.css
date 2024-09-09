@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.white-dot {
+  @apply bg-primary w-4 h-4 rounded-full inline-block;
+}
+
+a {
+  @apply text-accent underline;
+}
