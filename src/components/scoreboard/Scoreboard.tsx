@@ -77,6 +77,7 @@ const Scoreboard = () => {
           <thead>
             <tr>
               <th className="border border-gray-300 p-2 text-left">#</th>
+              <th className="border border-gray-300 p-2 text-left">Avatar</th>
               <th className="border border-gray-300 p-2 text-left">Username</th>
               <th className="border border-gray-300 p-2 text-left">Fav Lang</th>
               <th className="border border-gray-300 p-2 text-left">Location</th>

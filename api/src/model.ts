@@ -1,10 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity, Index } from 'typeorm';
 
 @Entity('usernames')
+@Index(['score'])
 export class Username extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Index(['username'], { unique: true })
   @Column({ unique: true, type: 'varchar' })
   username!: string;
 

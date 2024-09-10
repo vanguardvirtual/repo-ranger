@@ -5,6 +5,8 @@
 - Added analytics tracking code
 - Added Refresh User Score
 - Made Scoreboard into mulitple components for re-usability
+- Added Avatar on scoreboard
+- Added top 1 different emoji
 
 ## 9/9/2024
 

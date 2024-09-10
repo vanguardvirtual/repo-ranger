@@ -40,18 +40,27 @@ const UserRow = ({ user, index, setSelectedUser, hasUserBeenCreated, createdUser
   return (
     <tr ref={rowRef} className={rowClassName} key={user.username}>
       <td className="border border-gray-300 p-2">{index + 1}</td>
+      <td className="border border-gray-300 p-2 flex items-center justify-center">
+        <div className="avatar">
+          <div className="w-10 rounded-full">
+            <img src={user.avatar} alt={`avatar-${user.username}`} />
+          </div>
+        </div>
+      </td>
       <td className="border border-gray-300 p-2">{user.username}</td>
       <td className="border border-gray-300 p-2">{user.fav_language}</td>
       <td className="border border-gray-300 p-2">{user.location}</td>
       <td className="border border-gray-300 p-2">{user.score}</td>
       <td className="border border-gray-300 p-2">{user.emoji}</td>
-      <td className="border border-gray-300 p-2 flex gap-2">
-        <button onClick={() => setSelectedUser(user)} className="underline">
-          View Details
-        </button>
-        <button onClick={() => handleRefreshUser(user.id)} className="underline">
-          {isRefreshingUser ? 'Refreshing...' : 'Refresh Score'}
-        </button>
+      <td className="border border-gray-300 p-2 h-full">
+        <div className="flex gap-2 items-center h-full">
+          <button onClick={() => setSelectedUser(user)} className="underline">
+            View Details
+          </button>
+          <button onClick={() => handleRefreshUser(user.id)} className="underline">
+            {isRefreshingUser ? 'Refreshing...' : 'Refresh Score'}
+          </button>
+        </div>
       </td>
     </tr>
   );

@@ -101,18 +101,51 @@ export const retrieveGithubInformation = async (
   }
 };
 
-async function getTopScores(): Promise<number[]> {
-  const users = await Username.find({
-    select: ['score'],
-    order: { score: 'DESC' },
-    take: 10,
-  });
-  return users.map((user) => user.score);
+async function getTopScore(): Promise<number> {
+  try {
+    const topUser = await Username.findOne({
+      order: { score: 'DESC' },
+    });
+    return topUser?.score ?? 0;
+  } catch (error) {
+    console.error('Error in getTopScore:', error);
+    return 0;
+  }
+}
+
+async function getTopUsers(limit: number): Promise<Username[]> {
+  try {
+    const topUsers = await Username.find({
+      order: { score: 'DESC' },
+      take: limit,
+    });
+    return topUsers;
+  } catch (error) {
+    console.error('Error in getTopUsers:', error);
+    return [];
+  }
 }
 
 export const getEmoji = async (score: number): Promise<string> => {
-  const topScores = await getTopScores();
-  if (topScores.includes(score)) return '🌟';
-  if (score >= 1000) return '👏';
+  const topUsers = await getTopUsers(10);
+
+  if (topUsers.length === 0) {
+    return '💩'; // Default emoji if no users exist
+  }
+
+  const userRank = topUsers.findIndex((user) => user.score === score) + 1;
+
+  if (userRank === 1) {
+    return '😂'; // Top 1 user gets laugh face
+  }
+
+  if (userRank >= 2 && userRank <= 10) {
+    return '🌟'; // Top 2-10 users get star
+  }
+
+  if (score >= 1000) {
+    return '👏';
+  }
+
   return '💩';
 };
