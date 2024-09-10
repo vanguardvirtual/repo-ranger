@@ -6,7 +6,6 @@ export class Username extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Index(['username'], { unique: true })
   @Column({ unique: true, type: 'varchar' })
   username!: string;
 
@@ -30,6 +29,18 @@ export class Username extends BaseEntity {
 
   @Column({ type: 'varchar', default: 'John Doe' })
   name!: string;
+
+  @Column({ type: 'text', nullable: true })
+  ai_description!: string;
+
+  @Column({ type: 'int', default: 0 })
+  followers!: number;
+
+  @Column({ type: 'int', default: 0 })
+  following!: number;
+
+  @Column({ type: 'datetime', nullable: true })
+  ai_description_updated_at!: Date;
 
   @CreateDateColumn({ type: 'datetime' })
   created_at!: Date;

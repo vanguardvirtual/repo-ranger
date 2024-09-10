@@ -46,6 +46,7 @@ const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
             </div>
 
             <div className="mb-4">
+              <p className="mb-4 text-secondary">{user.ai_description}</p>
               <p>
                 <strong>Bio:</strong> {data.user.bio || 'N/A'}
               </p>

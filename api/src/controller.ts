@@ -1,5 +1,5 @@
 import { Username } from '@/model';
-import { retrieveGithubInformation } from '@/service';
+import { generateAiDescription, retrieveGithubInformation } from '@/service';
 import { Request, Response } from 'express';
 import { getEmoji } from '@/service';
 import { Like } from 'typeorm';
@@ -13,7 +13,8 @@ export const createUsername = async (req: Request, res: Response) => {
     });
   }
 
-  const { score, country, favoriteLanguage, contributions, status, name, bio, avatar } = await retrieveGithubInformation(username);
+  const { score, country, favoriteLanguage, contributions, status, name, bio, avatar, followers, following } =
+    await retrieveGithubInformation(username);
 
   if (status == 404) {
     return res.status(404).json({
@@ -31,7 +32,14 @@ export const createUsername = async (req: Request, res: Response) => {
   newUsername.name = name;
   newUsername.bio = bio;
   newUsername.avatar = avatar;
+  newUsername.followers = followers;
+  newUsername.following = following;
 
+  await newUsername.save();
+
+  const aiDescription = await generateAiDescription(newUsername);
+  newUsername.ai_description = aiDescription;
+  newUsername.ai_description_updated_at = new Date();
   await newUsername.save();
 
   res.json({
@@ -111,7 +119,9 @@ export const refreshScore = async (req: Request, res: Response) => {
     });
   }
 
-  const { score, country, favoriteLanguage, contributions, name, bio, avatar } = await retrieveGithubInformation(username.username);
+  const { score, country, favoriteLanguage, contributions, name, bio, avatar, followers, following } = await retrieveGithubInformation(
+    username.username,
+  );
 
   username.score = score;
   username.location = country;
@@ -120,8 +130,19 @@ export const refreshScore = async (req: Request, res: Response) => {
   username.name = name;
   username.bio = bio;
   username.avatar = avatar;
+  username.followers = followers;
+  username.following = following;
 
   await username.save();
+
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+  if (!username.ai_description_updated_at || username.ai_description_updated_at < oneWeekAgo) {
+    username.ai_description = await generateAiDescription(username);
+    username.ai_description_updated_at = new Date();
+    await username.save();
+  }
 
   res.json({
     username,

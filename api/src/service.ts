@@ -1,5 +1,10 @@
 import axios from 'axios';
 import { Username } from '@/model';
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 export const retrieveGithubInformation = async (
   username: string,
@@ -12,6 +17,8 @@ export const retrieveGithubInformation = async (
   bio: string;
   avatar: string;
   name: string;
+  followers: number;
+  following: number;
 }> => {
   try {
     const baseUrl = 'https://api.github.com/users/';
@@ -28,6 +35,8 @@ export const retrieveGithubInformation = async (
         bio: '',
         avatar: '',
         name: '',
+        followers: 0,
+        following: 0,
       };
     }
 
@@ -85,6 +94,8 @@ export const retrieveGithubInformation = async (
       bio: userData.bio || '',
       avatar: userData.avatar_url || '',
       name: userData.name || '',
+      followers: userData.followers || 0,
+      following: userData.following || 0,
     };
   } catch (error) {
     console.error('Error retrieving GitHub information for user:', username, error);
@@ -97,6 +108,8 @@ export const retrieveGithubInformation = async (
       bio: '',
       avatar: '',
       name: '',
+      followers: 0,
+      following: 0,
     };
   }
 };
@@ -148,4 +161,44 @@ export const getEmoji = async (score: number): Promise<string> => {
   }
 
   return '💩';
+};
+
+export const generateAiDescription = async (user: Username): Promise<string> => {
+  const isTop10 = (await getEmoji(user.score)) !== '💩';
+  const isTop1 = (await getEmoji(user.score)) === '😂';
+  const location = user.location === 'Unknown' ? 'an unknown place' : user.location;
+  const favLanguage =
+    user.fav_language === 'Unknown' ? 'they dont have a favorite language' : `their favorite language is ${user.fav_language}`;
+  const bio = user.bio === 'Unknown' ? '' : `and their bio is "${user.bio}"`;
+
+  let top10Sentence = 'they are not in the top 10';
+  if (isTop1) {
+    top10Sentence = 'they are the top user';
+  }
+  if (isTop10) {
+    top10Sentence = 'they are in the top 10';
+  }
+
+  const msg: Anthropic.Messages.Message = await anthropic.messages.create({
+    model: 'claude-3-haiku-20240307',
+    max_tokens: 1000,
+    temperature: 0,
+    system:
+      'I have created a website called Repo-Ranger, users put their Github username and we calculate a score based on some attributes of their Github Profile. We have a scoreboard on the frontend and the users are ordered by their score. The user also get an emoji based on their score. They get 💩 if they have bellow 1000 score, they get 👏 if the get above 1000 and 🌟 if they are in the top 10. If the user is first they get 😂. Keep the answers short and concise (max 1 line) and add emojis where applicable, try to be funny and sarcastic. I want you to generate a sentence that describes the user.',
+    messages: [
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: `Generate a sentence that discribes the user "${user.username}", they have a score of ${user.score} and ${top10Sentence}. The user is from ${location} and ${favLanguage}. They have ${user.followers} followers ${bio}"`,
+          },
+        ],
+      },
+    ],
+  });
+
+  return msg.content[0] && 'text' in msg.content[0]
+    ? msg.content[0].text
+    : "That user has such a bad profile that we couldn't generate a description for them. 💩";
 };

@@ -9,6 +9,7 @@ export interface IUser {
   bio: string;
   name: string;
   emoji: string;
+  ai_description: string;
 }
 
 export interface GitHubUser {
@@ -71,4 +72,9 @@ export interface ICreateUserResponse {
 
 export interface ICreateUser {
   username: string;
+}
+
+export interface ScorePopupProps {
+  user: IUser;
+  onClickHandler: () => void;
 }

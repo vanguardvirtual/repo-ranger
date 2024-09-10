@@ -3,9 +3,12 @@ import express from 'express';
 import 'dotenv/config';
 import { router } from '@/routes';
 import 'reflect-metadata';
-import { initializeDatabase } from './database';
+import AppDataSource, { initializeDatabase } from './database';
 import rateLimit from 'express-rate-limit';
 import bodyParser from 'body-parser';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import { setupWebSockets } from '@/sockets';
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -16,6 +19,15 @@ const limiter = rateLimit({
 const port = process.env.PORT || 3000;
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+
+setupWebSockets(io, AppDataSource);
 
 app.use(cors());
 app.use(express.json());
@@ -26,7 +38,7 @@ app.use(bodyParser.json());
 
 async function startApp() {
   await initializeDatabase();
-  app.listen(port, () => {
+  httpServer.listen(port, () => {
     console.log(`App listening on port: ${port}`);
   });
 }

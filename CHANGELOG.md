@@ -7,6 +7,9 @@
 - Made Scoreboard into mulitple components for re-usability
 - Added Avatar on scoreboard
 - Added top 1 different emoji
+- Added Anthropic AI to generate AI descriptions for users
+- Added notification toggle to homepage
+- Added notifiocations with react toastify
 
 ## 9/9/2024
 

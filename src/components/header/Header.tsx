@@ -1,5 +1,3 @@
-import Scoreboard from '@components/scoreboard/Scoreboard';
-
 const Header = () => {
   return (
     <>
@@ -51,9 +49,6 @@ const Header = () => {
       <p>
         💬 Comments: <b className="underline">+1</b> point for each comment
       </p>
-      <div className="mt-4">
-        <Scoreboard />
-      </div>
     </>
   );
 };
