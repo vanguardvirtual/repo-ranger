@@ -1,37 +1,39 @@
 import { useQuery } from 'react-query';
 import { GitHubUser, GitHubUserData } from '../types';
 import endpoints from '@config/endpoints';
+import { apiCallWithToken } from '@api/apiCall';
 
 const fetchGitHubUserData = async (username: string): Promise<GitHubUserData> => {
-  const userResponse = await fetch(`${endpoints.GITHUB_API_BASE}/users/${username}`, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_GITHUB_ACCESS_TOKEN}`,
-      Accept: 'application/vnd.github.v3+json',
-    },
-  });
-  if (!userResponse.ok) {
+  const userResponse = await apiCallWithToken.get(`${endpoints.GITHUB_API_BASE}/users/${username}`);
+  if (userResponse.status !== 200) {
     throw new Error('Failed to fetch GitHub user data');
   }
-  const userData: GitHubUser = await userResponse.json();
+  const userData: GitHubUser = userResponse.data;
 
   const [followersResponse, followingResponse, reposResponse, gistsResponse, starredResponse] = await Promise.all([
-    fetch(userData.followers_url),
-    fetch(userData.following_url.replace('{/other_user}', '')),
-    fetch(userData.repos_url),
-    fetch(userData.gists_url.replace('{/gist_id}', '')),
-    fetch(userData.starred_url.replace('{/owner}{/repo}', '')),
+    apiCallWithToken.get(userData.followers_url),
+    apiCallWithToken.get(userData.following_url.replace('{/other_user}', '')),
+    apiCallWithToken.get(userData.repos_url),
+    apiCallWithToken.get(userData.gists_url.replace('{/gist_id}', '')),
+    apiCallWithToken.get(userData.starred_url.replace('{/owner}{/repo}', '')),
   ]);
 
-  if (!followersResponse.ok || !followingResponse.ok || !reposResponse.ok || !gistsResponse.ok || !starredResponse.ok) {
+  if (
+    followersResponse.status !== 200 ||
+    followingResponse.status !== 200 ||
+    reposResponse.status !== 200 ||
+    gistsResponse.status !== 200 ||
+    starredResponse.status !== 200
+  ) {
     throw new Error('Failed to fetch additional GitHub data');
   }
 
   const [followers, following, repos, gists, starred] = await Promise.all([
-    followersResponse.json(),
-    followingResponse.json(),
-    reposResponse.json(),
-    gistsResponse.json(),
-    starredResponse.json(),
+    followersResponse.data,
+    followingResponse.data,
+    reposResponse.data,
+    gistsResponse.data,
+    starredResponse.data,
   ]);
 
   return {

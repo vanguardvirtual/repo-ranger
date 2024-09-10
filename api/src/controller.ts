@@ -13,6 +13,14 @@ export const createUsername = async (req: Request, res: Response) => {
     });
   }
 
+  const usernameExists = await Username.findOne({ where: { username } });
+
+  if (usernameExists) {
+    return res.status(400).json({
+      message: 'Username already exists',
+    });
+  }
+
   const { score, country, favoriteLanguage, contributions, status, name, bio, avatar, followers, following } =
     await retrieveGithubInformation(username);
 

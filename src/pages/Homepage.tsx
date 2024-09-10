@@ -42,7 +42,6 @@ const Homepage = () => {
       });
 
       socket.on('user_notification', (notification: IUser) => {
-        console.log('Received user notification:', notification);
         toast(<ScorePopup user={notification} onClickHandler={() => setSelectedUser(notification)} />, {});
       });
 
