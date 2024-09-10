@@ -1,8 +1,8 @@
-import { Username } from '@/model';
+import { ChatMessage, Username } from '@/model';
 import { generateAiDescription, retrieveGithubInformation } from '@/service';
 import { Request, Response } from 'express';
 import { getEmoji } from '@/service';
-import { Like } from 'typeorm';
+import { LessThan, Like } from 'typeorm';
 
 export const createUsername = async (req: Request, res: Response) => {
   const { username } = req.body;
@@ -155,4 +155,29 @@ export const refreshScore = async (req: Request, res: Response) => {
   res.json({
     username,
   });
+};
+
+export const getLatestChatMessages = async (_req: Request, res: Response) => {
+  const messages = await ChatMessage.find({
+    order: { created_at: 'DESC' },
+    take: 50,
+  });
+  res.json({ messages: messages.reverse() });
+};
+
+export const getOlderChatMessages = async (req: Request, res: Response) => {
+  const { oldestMessageId } = req.params;
+  const oldestMessage = await ChatMessage.findOne({ where: { id: Number(oldestMessageId) } });
+
+  if (!oldestMessage) {
+    return res.status(404).json({ message: 'Message not found' });
+  }
+
+  const olderMessages = await ChatMessage.find({
+    where: { created_at: LessThan(oldestMessage.created_at) },
+    order: { created_at: 'DESC' },
+    take: 5,
+  });
+
+  res.json({ messages: olderMessages.reverse() });
 };

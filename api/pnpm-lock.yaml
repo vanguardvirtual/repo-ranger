@@ -40,6 +40,9 @@ importers:
       typeorm:
         specifier: ^0.3.20
         version: 0.3.20(mysql2@3.11.0)(sqlite3@5.1.7)
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
     devDependencies:
       '@types/body-parser':
         specifier: ^1.19.5
@@ -53,6 +56,9 @@ importers:
       '@types/node':
         specifier: ^22.5.4
         version: 22.5.4
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
@@ -299,6 +305,9 @@ packages:
 
   '@types/serve-static@1.15.7':
     resolution: { integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw== }
+
+  '@types/uuid@10.0.0':
+    resolution: { integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ== }
 
   abbrev@1.1.1:
     resolution: { integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q== }
@@ -1509,6 +1518,10 @@ packages:
     resolution: { integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA== }
     engines: { node: '>= 0.4.0' }
 
+  uuid@10.0.0:
+    resolution: { integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ== }
+    hasBin: true
+
   uuid@9.0.1:
     resolution: { integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA== }
     hasBin: true
@@ -1772,6 +1785,8 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/node': 22.5.4
       '@types/send': 0.17.4
+
+  '@types/uuid@10.0.0': {}
 
   abbrev@1.1.1:
     optional: true
@@ -3157,6 +3172,8 @@ snapshots:
     optional: true
 
   utils-merge@1.0.1: {}
+
+  uuid@10.0.0: {}
 
   uuid@9.0.1: {}
 

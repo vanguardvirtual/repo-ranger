@@ -11,6 +11,10 @@
 - Added notification toggle to homepage
 - Added notifiocations with react toastify
 - Made github request authenticated to not get rate limited
+- Fixed duplicate error on username creation
+- Moved from fetch to axios
+- Added music toggle to homepage
+- Added IRC chat
 
 ## 9/9/2024
 

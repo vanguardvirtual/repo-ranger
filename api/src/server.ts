@@ -20,24 +20,26 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-  },
-});
-
-setupWebSockets(io, AppDataSource);
-
-app.use(cors());
-app.use(express.json());
-app.get('/', (_req, res) => res.send('🚀 Server is running!'));
-app.use('/api', router);
-app.use(limiter);
-app.use(bodyParser.json());
 
 async function startApp() {
   await initializeDatabase();
+
+  const io = new Server(httpServer, {
+    cors: {
+      origin: '*',
+      methods: ['GET', 'POST'],
+    },
+  });
+
+  setupWebSockets(io, AppDataSource);
+
+  app.use(cors());
+  app.use(express.json());
+  app.get('/', (_req, res) => res.send('🚀 Server is running!'));
+  app.use('/api', router);
+  app.use(limiter);
+  app.use(bodyParser.json());
+
   httpServer.listen(port, () => {
     console.log(`App listening on port: ${port}`);
   });

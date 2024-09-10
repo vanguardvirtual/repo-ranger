@@ -7,4 +7,5 @@ export default {
   REFRESH_SCORE: `${API_URL}/api/refresh`,
   SEARCH_USERS: `${API_URL}/api/search`,
   GITHUB_API_BASE: 'https://api.github.com',
+  CHAT_MESSAGES: `${API_URL}/api/chat/messages`,
 };

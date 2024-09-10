@@ -25,13 +25,15 @@
     "mysql2": "^3.11.0",
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.7.5",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^22.5.4",
+    "@types/uuid": "^10.0.0",
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.19.0",

@@ -78,3 +78,16 @@ export interface ScorePopupProps {
   user: IUser;
   onClickHandler: () => void;
 }
+
+export interface ChatMessageLive {
+  id: number;
+  username: string;
+  message: string;
+  timestamp: string;
+}
+export interface ChatMessage {
+  id: number;
+  username: string;
+  message: string;
+  created_at: string; // Update this line
+}

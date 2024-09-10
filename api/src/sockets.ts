@@ -1,10 +1,85 @@
-import { Server } from 'socket.io';
-import { Username } from './model';
+import { Server, Socket } from 'socket.io';
+import { Username, ChatMessage } from './model';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, EventSubscriber, DataSource } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+
+interface ChatMessageData {
+  id: number;
+  username: string;
+  message: string;
+  timestamp: string;
+}
+
+const chatMessages: ChatMessage[] = [];
 
 export function setupWebSockets(io: Server, dataSource: DataSource) {
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket: Socket) => {
     console.log('A user connected');
+
+    socket.on('set username', (username: string) => {
+      socket.data.username = username;
+      console.log(`Username set: ${username}`);
+    });
+
+    socket.on('chat message', async (data: { username: string; message: string }) => {
+      try {
+        const newMessage = new ChatMessage();
+        newMessage.username = data.username;
+        newMessage.message = data.message;
+        await newMessage.save();
+
+        const chatMessageData: ChatMessageData = {
+          id: newMessage.id,
+          username: newMessage.username,
+          message: newMessage.message,
+          timestamp: newMessage.created_at.toISOString(),
+        };
+
+        io.emit('chat message', chatMessageData);
+      } catch (error) {
+        console.error('Error saving chat message:', error);
+      }
+    });
+
+    socket.on('load more messages', async (oldestMessageId: number) => {
+      try {
+        const olderMessages = await ChatMessage.find({
+          where: { id: oldestMessageId },
+          order: { created_at: 'DESC' },
+          take: 5,
+        });
+
+        const chatMessageData: ChatMessageData[] = olderMessages.map((msg) => ({
+          id: msg.id,
+          username: msg.username,
+          message: msg.message,
+          timestamp: msg.created_at.toISOString(),
+        }));
+
+        socket.emit('chat history', chatMessageData.reverse());
+      } catch (error) {
+        console.error('Error fetching older messages:', error);
+      }
+    });
+
+    // Send the latest 50 messages to the newly connected client
+    try {
+      const latestMessages = await ChatMessage.find({
+        order: { created_at: 'DESC' },
+        take: 50,
+      });
+
+      const chatMessageData: ChatMessageData[] = latestMessages.map((msg) => ({
+        id: msg.id,
+        username: msg.username,
+        message: msg.message,
+        timestamp: msg.created_at.toISOString(),
+      }));
+
+      socket.emit('chat history', chatMessageData.reverse());
+    } catch (error) {
+      console.error('Error fetching latest messages:', error);
+    }
 
     const interval = setInterval(async () => {
       try {
