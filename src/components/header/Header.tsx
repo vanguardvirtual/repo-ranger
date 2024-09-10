@@ -4,7 +4,7 @@ const Header = () => {
       <span className="white-dot"></span>
       <h1 className="text-xl font-bold">Welcome to Repo-Ranger</h1>
       <p className="mb-2">The AI-powered Github leaderboard.</p>
-      <p className="mb-8">
+      <p>
         Created by{' '}
         <a href="https://x.com/sotergreco" target="_blank" rel="noopener noreferrer">
           @sotergreco
@@ -16,10 +16,29 @@ const Header = () => {
             Github
           </a>
         </span>
+        {' - '}
+        <span>
+          Make donations on{' '}
+          <a
+            href="https://www.kickstarter.com/projects/sotergreco/repo-ranger-ai-powered-github-leaderboard"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Kickstarter
+          </a>{' '}
+        </span>
+      </p>
+      <p className="text-sm mb-8">
+        Donations will go to server costs and I will make{' '}
+        <a href="https://x.com/sotergreco" target="_blank" rel="noopener noreferrer">
+          X (formerly known as Twitter) polls
+        </a>{' '}
+        on where you want to do donate the money.
       </p>
       <p className="mb-4">
-        Repo-Ranger is an AI-powered Github leaderboard that has no AI. It analyzes your Github activity and based on your score you win a
-        clap <span className="text-2xl">👏</span> or a <span className="text-2xl">💩</span>. Top 10 will get 🌟
+        Repo-Ranger is an AI-powered Github leaderboard. It analyzes your Github activity and based on your score{' '}
+        <span className="text-xl">(💯)</span> you win a clap <span className="text-xl">(👏)</span> or a poo
+        <span className="text-xl">(💩)</span>. Top 10 will get <span className="text-xl">🌟</span>
       </p>
       <p className="mb-2">How we calculate your score?</p>
       <p>
