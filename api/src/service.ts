@@ -22,7 +22,12 @@ export const retrieveGithubInformation = async (
 }> => {
   try {
     const baseUrl = 'https://api.github.com/users/';
-    const userResponse = await axios.get(`${baseUrl}${username}`);
+    const userResponse = await axios.get(`${baseUrl}${username}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
     const userData = userResponse.data;
 
     if (userResponse.status === 404) {

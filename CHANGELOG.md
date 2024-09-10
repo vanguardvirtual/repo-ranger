@@ -10,6 +10,7 @@
 - Added Anthropic AI to generate AI descriptions for users
 - Added notification toggle to homepage
 - Added notifiocations with react toastify
+- Made github request authenticated to not get rate limited
 
 ## 9/9/2024
 

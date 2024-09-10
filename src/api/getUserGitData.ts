@@ -3,7 +3,12 @@ import { GitHubUser, GitHubUserData } from '../types';
 import endpoints from '@config/endpoints';
 
 const fetchGitHubUserData = async (username: string): Promise<GitHubUserData> => {
-  const userResponse = await fetch(`${endpoints.GITHUB_API_BASE}/users/${username}`);
+  const userResponse = await fetch(`${endpoints.GITHUB_API_BASE}/users/${username}`, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_GITHUB_ACCESS_TOKEN}`,
+      Accept: 'application/vnd.github.v3+json',
+    },
+  });
   if (!userResponse.ok) {
     throw new Error('Failed to fetch GitHub user data');
   }

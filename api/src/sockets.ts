@@ -16,7 +16,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
       } catch (error) {
         console.error('Error fetching random user:', error);
       }
-    }, 7000); // Fixed interval of 20 seconds
+    }, 7000);
 
     socket.on('disconnect', () => {
       console.log('User disconnected');
