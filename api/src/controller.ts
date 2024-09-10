@@ -124,6 +124,6 @@ export const refreshScore = async (req: Request, res: Response) => {
   await username.save();
 
   res.json({
-    message: 'Score refreshed',
+    username,
   });
 };

@@ -59,7 +59,8 @@ export const retrieveGithubInformation = async (
         languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
       }
     }
-    const favoriteLanguage = Object.entries(languageCounts).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+    const favoriteLanguage =
+      Object.entries(languageCounts).length > 0 ? Object.entries(languageCounts).reduce((a, b) => (a[1] > b[1] ? a : b))[0] : 'Unknown';
 
     // Count contributions
     const eventsResponse = await axios.get(`${baseUrl}${username}/events`);

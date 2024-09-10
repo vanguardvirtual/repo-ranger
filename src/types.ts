@@ -59,3 +59,16 @@ export interface GitHubUserData {
   gists: GitHubGist[];
   starred: GitHubStarred[];
 }
+
+export interface IRefreshUserResponse {
+  username: IUser;
+}
+
+export interface ICreateUserResponse {
+  message: string;
+  username: IUser;
+}
+
+export interface ICreateUser {
+  username: string;
+}

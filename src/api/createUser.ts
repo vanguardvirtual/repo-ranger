@@ -1,16 +1,7 @@
 import endpoints from '@config/endpoints';
 import { useMutation } from 'react-query';
 import apiCall from './apiCall';
-import { IUser } from '../types';
-
-interface ICreateUser {
-  username: string;
-}
-
-interface ICreateUserResponse {
-  message: string;
-  username: IUser;
-}
+import { ICreateUser, ICreateUserResponse } from '../types';
 
 const api = async (data: ICreateUser): Promise<ICreateUserResponse> => {
   const { username } = data;
