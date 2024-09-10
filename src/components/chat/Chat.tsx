@@ -23,7 +23,7 @@ const Chat = () => {
 
   const handleSendMessage = (e: Event) => {
     e.preventDefault();
-    if (inputMessage.trim() !== '') {
+    if (inputMessage.trim() !== '' && socketRef.current) {
       socketRef.current.emit('chat message', { username, message: inputMessage });
       setInputMessage('');
     }
@@ -31,7 +31,7 @@ const Chat = () => {
 
   const handleSetUsername = (e: Event) => {
     e.preventDefault();
-    if (username.trim() !== '') {
+    if (username.trim() !== '' && socketRef.current) {
       setIsUsernameSet(true);
       socketRef.current.emit('set username', username);
       // Store username in localStorage
@@ -65,7 +65,7 @@ const Chat = () => {
     });
 
     return () => {
-      socketRef.current.disconnect();
+      socketRef.current?.disconnect();
     };
   }, []);
 
