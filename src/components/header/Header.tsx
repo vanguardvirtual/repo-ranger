@@ -16,24 +16,6 @@ const Header = () => {
             Github
           </a>
         </span>
-        {' - '}
-        <span>
-          Make donations on{' '}
-          <a
-            href="https://www.kickstarter.com/projects/sotergreco/repo-ranger-ai-powered-github-leaderboard"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Kickstarter
-          </a>{' '}
-        </span>
-      </p>
-      <p className="text-sm mb-8">
-        Donations will go to server costs and I will make{' '}
-        <a href="https://x.com/sotergreco" target="_blank" rel="noopener noreferrer">
-          X (formerly known as Twitter) polls
-        </a>{' '}
-        on where you want to do donate the money.
       </p>
       <p className="mb-4">
         Repo-Ranger is an AI-powered Github leaderboard. It analyzes your Github activity and based on your score{' '}
