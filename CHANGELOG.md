@@ -1,5 +1,9 @@
 # Changelog
 
+## 12/9/2024
+
+- Fixed too quick notification, now it's 8 seconds to close and sends them every 15 seconds
+
 ## 10/9/2024
 
 - Added analytics tracking code

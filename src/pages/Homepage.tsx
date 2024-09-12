@@ -115,7 +115,7 @@ const Homepage = () => {
         <div className="mt-4">{showScoreboard ? <Scoreboard /> : <Chat />}</div>
         <ToastContainer
           position={isMobile ? 'top-right' : 'bottom-right'}
-          autoClose={4000}
+          autoClose={8000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}

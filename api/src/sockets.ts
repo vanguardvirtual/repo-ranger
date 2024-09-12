@@ -91,7 +91,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
       } catch (error) {
         console.error('Error fetching random user:', error);
       }
-    }, 10000);
+    }, 15000);
 
     socket.on('disconnect', () => {
       console.log('User disconnected');
