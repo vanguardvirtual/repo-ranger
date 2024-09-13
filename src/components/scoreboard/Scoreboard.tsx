@@ -89,7 +89,7 @@ const Scoreboard = () => {
             {users?.data?.map((user: IUser, index: number) => (
               <UserRow
                 hasUserBeenCreated={isUserCreated}
-                createdUser={createdUser}
+                createdUser={createdUser?.username}
                 key={user.username}
                 user={user}
                 index={index}
