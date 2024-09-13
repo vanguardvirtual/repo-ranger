@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { Username, ChatMessage } from './model';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, EventSubscriber, DataSource } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { logger } from '@/utils';
 
 interface ChatMessageData {
   id: number;
@@ -10,15 +10,10 @@ interface ChatMessageData {
   timestamp: string;
 }
 
-const chatMessages: ChatMessage[] = [];
-
 export function setupWebSockets(io: Server, dataSource: DataSource) {
   io.on('connection', async (socket: Socket) => {
-    console.log('A user connected');
-
     socket.on('set username', (username: string) => {
       socket.data.username = username;
-      console.log(`Username set: ${username}`);
     });
 
     socket.on('chat message', async (data: { username: string; message: string }) => {
@@ -37,7 +32,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
         io.emit('chat message', chatMessageData);
       } catch (error) {
-        console.error('Error saving chat message:', error);
+        logger('error', `Error saving chat message: ${error}`);
       }
     });
 
@@ -58,7 +53,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
         socket.emit('chat history', chatMessageData.reverse());
       } catch (error) {
-        console.error('Error fetching older messages:', error);
+        logger('error', `Error fetching older messages: ${error}`);
       }
     });
 
@@ -78,7 +73,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
       socket.emit('chat history', chatMessageData.reverse());
     } catch (error) {
-      console.error('Error fetching latest messages:', error);
+      logger('error', `Error fetching latest messages: ${error}`);
     }
 
     const interval = setInterval(async () => {
@@ -89,12 +84,12 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
           sendUserNotification(socket, randomUser);
         }
       } catch (error) {
-        console.error('Error fetching random user:', error);
+        logger('error', `Error fetching random user: ${error}`);
       }
     }, 15000);
 
     socket.on('disconnect', () => {
-      console.log('User disconnected');
+      logger('info', 'User disconnected');
       clearInterval(interval);
     });
   });
@@ -103,11 +98,10 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
   if (dataSource && dataSource.subscribers) {
     dataSource.subscribers.push(new UsernameSubscriber(io));
   } else {
-    console.error('DataSource is not properly initialized or lacks subscribers property');
+    logger('error', 'DataSource is not properly initialized or lacks subscribers property');
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const sendUserNotification = (socket: any, user: Username) => {
   const notification = {
     avatar: user.avatar,

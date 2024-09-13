@@ -1,18 +1,14 @@
 import endpoints from '@config/endpoints';
 import { useMutation } from 'react-query';
 import apiCall from './apiCall';
-import { ChatMessage } from '../types';
+import { ChatMessage, IResponse } from '../types';
 
 interface LoadMoreMessagesParams {
   oldestMessageId: number;
 }
 
-interface LoadMoreMessagesResponse {
-  messages: ChatMessage[];
-}
-
-const api = async ({ oldestMessageId }: LoadMoreMessagesParams): Promise<LoadMoreMessagesResponse> => {
-  const response = await apiCall.get(`${endpoints.CHAT_MESSAGES}/${oldestMessageId}`);
+const api = async ({ oldestMessageId }: LoadMoreMessagesParams): Promise<IResponse<ChatMessage[]>> => {
+  const response = await apiCall.get<IResponse<ChatMessage[]>>(`${endpoints.CHAT_MESSAGES}/${oldestMessageId}`);
   return response.data;
 };
 

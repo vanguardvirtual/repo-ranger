@@ -3,21 +3,30 @@ import { generateAiDescription, retrieveGithubInformation } from '@/service';
 import { Request, Response } from 'express';
 import { getEmoji } from '@/service';
 import { LessThan, Like } from 'typeorm';
+import { asyncFn, resFn } from '@/utils';
 
-export const createUsername = async (req: Request, res: Response) => {
+export const createUsername = asyncFn(async (req: Request, res: Response) => {
   const { username } = req.body;
 
   if (!username) {
-    return res.status(400).json({
+    return resFn(res, {
+      data: null,
       message: 'Username is required',
+      status: 400,
+      success: false,
+      error: 'Username is required',
     });
   }
 
   const usernameExists = await Username.findOne({ where: { username } });
 
   if (usernameExists) {
-    return res.status(400).json({
+    return resFn(res, {
+      data: null,
       message: 'Username already exists',
+      status: 400,
+      success: false,
+      error: 'Username already exists',
     });
   }
 
@@ -25,8 +34,12 @@ export const createUsername = async (req: Request, res: Response) => {
     await retrieveGithubInformation(username);
 
   if (status == 404) {
-    return res.status(404).json({
+    return resFn(res, {
+      data: null,
       message: 'User not found',
+      status: 404,
+      success: false,
+      error: 'User not found',
     });
   }
 
@@ -50,13 +63,16 @@ export const createUsername = async (req: Request, res: Response) => {
   newUsername.ai_description_updated_at = new Date();
   await newUsername.save();
 
-  res.json({
+  resFn(res, {
+    data: newUsername,
     message: 'Username created',
-    username: newUsername,
+    status: 200,
+    success: true,
+    error: '',
   });
-};
+});
 
-export const getUsernames = async (req: Request, res: Response) => {
+export const getUsernames = asyncFn(async (req: Request, res: Response) => {
   const usernames = await Username.find();
   const usernamesWithEmoji = await Promise.all(
     usernames.map(async (username) => ({
@@ -64,12 +80,17 @@ export const getUsernames = async (req: Request, res: Response) => {
       emoji: await getEmoji(username.score),
     })),
   );
-  res.json({
-    usernames: usernamesWithEmoji,
-  });
-};
 
-export const getUsernameById = async (req: Request, res: Response) => {
+  resFn(res, {
+    data: usernamesWithEmoji,
+    message: 'Usernames fetched',
+    status: 200,
+    success: true,
+    error: '',
+  });
+});
+
+export const getUsernameById = asyncFn(async (req: Request, res: Response) => {
   if (!req.params.id) {
     return res.status(400).json({
       message: 'Id is required',
@@ -79,22 +100,30 @@ export const getUsernameById = async (req: Request, res: Response) => {
   const username = await Username.findOne({ where: { id: Number(req.params.id) } });
 
   if (!username) {
-    return res.status(404).json({
+    return resFn(res, {
+      data: null,
       message: 'Username not found',
+      status: 404,
+      success: false,
+      error: 'Username not found',
     });
   }
 
   const emoji = await getEmoji(username.score);
 
-  res.json({
-    username: {
+  resFn(res, {
+    data: {
       ...username,
       emoji,
     },
+    message: 'Username fetched',
+    status: 200,
+    success: true,
+    error: '',
   });
-};
+});
 
-export const searchUsernames = async (req: Request, res: Response) => {
+export const searchUsernames = asyncFn(async (req: Request, res: Response) => {
   const { query } = req.query;
 
   const usernames = await Username.find({
@@ -113,17 +142,25 @@ export const searchUsernames = async (req: Request, res: Response) => {
     })),
   );
 
-  res.json({
-    usernames: usernamesWithEmoji,
+  resFn(res, {
+    data: usernamesWithEmoji,
+    message: 'Usernames fetched',
+    status: 200,
+    success: true,
+    error: '',
   });
-};
+});
 
-export const refreshScore = async (req: Request, res: Response) => {
+export const refreshScore = asyncFn(async (req: Request, res: Response) => {
   const username = await Username.findOne({ where: { id: Number(req.params.id) } });
 
   if (!username) {
-    return res.status(404).json({
+    return resFn(res, {
+      data: null,
       message: 'Username not found',
+      status: 404,
+      success: false,
+      error: 'Username not found',
     });
   }
 
@@ -152,25 +189,41 @@ export const refreshScore = async (req: Request, res: Response) => {
     await username.save();
   }
 
-  res.json({
-    username,
+  resFn(res, {
+    data: username,
+    message: 'Username refreshed',
+    status: 200,
+    success: true,
+    error: '',
   });
-};
+});
 
-export const getLatestChatMessages = async (_req: Request, res: Response) => {
+export const getLatestChatMessages = asyncFn(async (_req: Request, res: Response) => {
   const messages = await ChatMessage.find({
     order: { created_at: 'DESC' },
     take: 50,
   });
-  res.json({ messages: messages.reverse() });
-};
+  resFn(res, {
+    data: messages.reverse(),
+    message: 'Messages fetched',
+    status: 200,
+    success: true,
+    error: '',
+  });
+});
 
-export const getOlderChatMessages = async (req: Request, res: Response) => {
+export const getOlderChatMessages = asyncFn(async (req: Request, res: Response) => {
   const { oldestMessageId } = req.params;
   const oldestMessage = await ChatMessage.findOne({ where: { id: Number(oldestMessageId) } });
 
   if (!oldestMessage) {
-    return res.status(404).json({ message: 'Message not found' });
+    return resFn(res, {
+      data: null,
+      message: 'Message not found',
+      status: 404,
+      success: false,
+      error: 'Message not found',
+    });
   }
 
   const olderMessages = await ChatMessage.find({
@@ -179,5 +232,11 @@ export const getOlderChatMessages = async (req: Request, res: Response) => {
     take: 5,
   });
 
-  res.json({ messages: olderMessages.reverse() });
-};
+  resFn(res, {
+    data: olderMessages.reverse(),
+    message: 'Messages fetched',
+    status: 200,
+    success: true,
+    error: '',
+  });
+});

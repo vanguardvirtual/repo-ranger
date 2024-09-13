@@ -1,5 +1,5 @@
 #!/bin/sh
-npx eslint --max-warnings=0 . || {
+npx eslint --max-warnings=0 src api/src || {
   echo "ESLint check failed. Commit aborted."
   exit 1
 }

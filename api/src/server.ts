@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { setupWebSockets } from '@/sockets';
+import { logger } from '@/utils';
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -41,8 +42,8 @@ async function startApp() {
   app.use(bodyParser.json());
 
   httpServer.listen(port, () => {
-    console.log(`App listening on port: ${port}`);
+    logger('info', `App listening on port: ${port}`);
   });
 }
 
-startApp().catch((error) => console.error(error));
+startApp().catch((error) => logger('error', error));

@@ -2,6 +2,7 @@ import useGetGitHubUserData from '@api/getUserGitData';
 import { IoMdClose } from 'react-icons/io';
 import { IUser } from '../../types';
 import { useEffect } from 'preact/hooks';
+import useRefreshUser from '@api/refreshUser';
 
 interface DetailsProps {
   user: IUser;
@@ -10,6 +11,11 @@ interface DetailsProps {
 
 const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
   const { data, isLoading, error } = useGetGitHubUserData(user.username);
+  const { mutate: refreshUser, isLoading: isRefreshingUser } = useRefreshUser();
+
+  const handleRefreshUser = (id: number) => {
+    refreshUser({ id });
+  };
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -35,6 +41,9 @@ const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
               <a href={data.user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline">
                 View on GitHub
               </a>
+              <button onClick={() => handleRefreshUser(user.id)} className="text-blue-600 text-sm underline">
+                {isRefreshingUser ? 'Refreshing...' : 'Refresh Score'}
+              </button>
             </div>
 
             <div className="mb-4 flex items-center">

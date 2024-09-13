@@ -1,5 +1,13 @@
 # Changelog
 
+## 13/9/2024
+
+- Created asyncFn handler to not repeat code
+- Refactored all api calls to use asyncFn
+- Refactored frontend api calls to use reponse interface
+- Updated eslint to work with api/src as well
+- Updated eslint package.json commands.
+
 ## 12/9/2024
 
 - Fixed too quick notification, now it's 8 seconds to close and sends them every 15 seconds

@@ -1,29 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
-import { ICreateUserResponse, IUser } from '../../types';
-import useRefreshUser from '@api/refreshUser';
+import { IUser } from '../../types';
 
 interface UserRowProps {
   user: IUser;
   index: number;
   setSelectedUser: (user: IUser) => void;
   hasUserBeenCreated: boolean;
-  createdUser: ICreateUserResponse | undefined;
+  createdUser: IUser | undefined;
 }
 
 const UserRow = ({ user, index, setSelectedUser, hasUserBeenCreated, createdUser }: UserRowProps) => {
-  const { mutate: refreshUser, isLoading: isRefreshingUser, isSuccess: hasUserRefreshed, data: refreshedUser } = useRefreshUser();
   const [isFlashing, setIsFlashing] = useState(false);
   const rowRef = useRef<HTMLTableRowElement>(null);
 
-  const handleRefreshUser = (id: number) => {
-    refreshUser({ id });
-  };
-
   useEffect(() => {
-    const isUserRefreshed = hasUserRefreshed && refreshedUser && refreshedUser.username.id === user.id;
-    const isUserCreated = hasUserBeenCreated && createdUser && createdUser.username.id === user.id;
+    const isUserCreated = hasUserBeenCreated && createdUser && createdUser.id === user.id;
 
-    if (isUserRefreshed || isUserCreated) {
+    if (isUserCreated) {
       setIsFlashing(true);
       rowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
@@ -33,7 +26,7 @@ const UserRow = ({ user, index, setSelectedUser, hasUserBeenCreated, createdUser
 
       return () => clearTimeout(timer);
     }
-  }, [hasUserRefreshed, refreshedUser, user.id, hasUserBeenCreated, createdUser]);
+  }, [hasUserBeenCreated, createdUser, user.id]);
 
   const rowClassName = `transition-colors duration-300 ${isFlashing ? 'bg-green-200' : ''}`;
 
@@ -56,9 +49,6 @@ const UserRow = ({ user, index, setSelectedUser, hasUserBeenCreated, createdUser
         <div className="flex gap-2 items-center h-full">
           <button onClick={() => setSelectedUser(user)} className="underline">
             View Details
-          </button>
-          <button onClick={() => handleRefreshUser(user.id)} className="underline">
-            {isRefreshingUser ? 'Refreshing...' : 'Refresh Score'}
           </button>
         </div>
       </td>

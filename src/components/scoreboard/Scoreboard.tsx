@@ -52,7 +52,6 @@ const Scoreboard = () => {
     if (isUserCreated && createdUser) {
       refetch();
       setConfettiActive(true);
-
       setTimeout(() => setConfettiActive(false), 3000);
     }
   }, [isUserCreated, createdUser, refetch]);
@@ -87,7 +86,7 @@ const Scoreboard = () => {
             </tr>
           </thead>
           <tbody>
-            {users?.map((user: IUser, index: number) => (
+            {users?.data?.map((user: IUser, index: number) => (
               <UserRow
                 hasUserBeenCreated={isUserCreated}
                 createdUser={createdUser}

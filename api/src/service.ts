@@ -20,90 +20,16 @@ export const retrieveGithubInformation = async (
   followers: number;
   following: number;
 }> => {
-  try {
-    const baseUrl = 'https://api.github.com/users/';
-    const userResponse = await axios.get(`${baseUrl}${username}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
-        Accept: 'application/vnd.github.v3+json',
-      },
-    });
-    const userData = userResponse.data;
+  const baseUrl = 'https://api.github.com/users/';
+  const userResponse = await axios.get(`${baseUrl}${username}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+      Accept: 'application/vnd.github.v3+json',
+    },
+  });
+  const userData = userResponse.data;
 
-    if (userResponse.status === 404) {
-      return {
-        score: 0,
-        country: 'Unknown',
-        favoriteLanguage: 'Unknown',
-        contributions: 0,
-        status: 404,
-        bio: '',
-        avatar: '',
-        name: '',
-        followers: 0,
-        following: 0,
-      };
-    }
-
-    const reposResponse = await axios.get(userData.repos_url);
-    const reposData = reposResponse.data;
-
-    let score = 0;
-    let contributions = 0;
-    const languageCounts: { [key: string]: number } = {};
-
-    // Followers: +3 points each
-    score += userData.followers * 3;
-
-    // Following: -1 point each
-    score -= userData.following;
-
-    // Repositories: +2 points each
-    score += reposData.length * 2;
-
-    // Stars, Forks, and other metrics
-    for (const repo of reposData) {
-      score += repo.stargazers_count * 2; // Stars: +2 points each
-      score += repo.forks_count; // Forks: +1 point each
-    }
-
-    // Calculate favorite language
-    for (const repo of reposData) {
-      if (repo.language) {
-        languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
-      }
-    }
-    const favoriteLanguage =
-      Object.entries(languageCounts).length > 0 ? Object.entries(languageCounts).reduce((a, b) => (a[1] > b[1] ? a : b))[0] : 'Unknown';
-
-    // Count contributions
-    const eventsResponse = await axios.get(`${baseUrl}${username}/events`);
-    const eventsData = eventsResponse.data;
-
-    for (const event of eventsData) {
-      if (event.type === 'PushEvent') {
-        contributions++;
-        score++;
-      }
-      if (event.type === 'PullRequestEvent') score += 2; // Pull Requests: +2 points each
-      if (event.type === 'IssuesEvent') score++; // Issues: +1 point each
-      if (event.type === 'IssueCommentEvent') score++; // Comments: +1 point each
-    }
-
-    return {
-      score,
-      country: userData.location || 'Unknown',
-      favoriteLanguage,
-      contributions,
-      status: userResponse.status,
-      bio: userData.bio || '',
-      avatar: userData.avatar_url || '',
-      name: userData.name || '',
-      followers: userData.followers || 0,
-      following: userData.following || 0,
-    };
-  } catch (error) {
-    console.error('Error retrieving GitHub information for user:', username, error);
+  if (userResponse.status === 404) {
     return {
       score: 0,
       country: 'Unknown',
@@ -117,32 +43,80 @@ export const retrieveGithubInformation = async (
       following: 0,
     };
   }
+
+  const reposResponse = await axios.get(userData.repos_url);
+  const reposData = reposResponse.data;
+
+  let score = 0;
+  let contributions = 0;
+  const languageCounts: { [key: string]: number } = {};
+
+  // Followers: +3 points each
+  score += userData.followers * 3;
+
+  // Following: -1 point each
+  score -= userData.following;
+
+  // Repositories: +2 points each
+  score += reposData.length * 2;
+
+  // Stars, Forks, and other metrics
+  for (const repo of reposData) {
+    score += repo.stargazers_count * 2; // Stars: +2 points each
+    score += repo.forks_count; // Forks: +1 point each
+  }
+
+  // Calculate favorite language
+  for (const repo of reposData) {
+    if (repo.language) {
+      languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
+    }
+  }
+  const favoriteLanguage =
+    Object.entries(languageCounts).length > 0 ? Object.entries(languageCounts).reduce((a, b) => (a[1] > b[1] ? a : b))[0] : 'Unknown';
+
+  // Count contributions
+  const eventsResponse = await axios.get(`${baseUrl}${username}/events`);
+  const eventsData = eventsResponse.data;
+
+  for (const event of eventsData) {
+    if (event.type === 'PushEvent') {
+      contributions++;
+      score++;
+    }
+    if (event.type === 'PullRequestEvent') score += 2; // Pull Requests: +2 points each
+    if (event.type === 'IssuesEvent') score++; // Issues: +1 point each
+    if (event.type === 'IssueCommentEvent') score++; // Comments: +1 point each
+  }
+
+  return {
+    score,
+    country: userData.location || 'Unknown',
+    favoriteLanguage,
+    contributions,
+    status: userResponse.status,
+    bio: userData.bio || '',
+    avatar: userData.avatar_url || '',
+    name: userData.name || '',
+    followers: userData.followers || 0,
+    following: userData.following || 0,
+  };
 };
 
-async function getTopScore(): Promise<number> {
-  try {
-    const topUser = await Username.findOne({
-      order: { score: 'DESC' },
-    });
-    return topUser?.score ?? 0;
-  } catch (error) {
-    console.error('Error in getTopScore:', error);
-    return 0;
-  }
-}
+export const getTopScore = async (): Promise<number> => {
+  const topUser = await Username.findOne({
+    order: { score: 'DESC' },
+  });
+  return topUser?.score ?? 0;
+};
 
-async function getTopUsers(limit: number): Promise<Username[]> {
-  try {
-    const topUsers = await Username.find({
-      order: { score: 'DESC' },
-      take: limit,
-    });
-    return topUsers;
-  } catch (error) {
-    console.error('Error in getTopUsers:', error);
-    return [];
-  }
-}
+export const getTopUsers = async (limit: number): Promise<Username[]> => {
+  const topUsers = await Username.find({
+    order: { score: 'DESC' },
+    take: limit,
+  });
+  return topUsers;
+};
 
 export const getEmoji = async (score: number): Promise<string> => {
   const topUsers = await getTopUsers(10);

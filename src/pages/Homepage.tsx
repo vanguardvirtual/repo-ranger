@@ -52,14 +52,6 @@ const Homepage = () => {
         transports: ['websocket', 'polling'],
       });
 
-      socket.on('connect', () => {
-        console.log('Connected to sockets');
-      });
-
-      socket.on('connect_error', (error) => {
-        console.error('Connection error:', error);
-      });
-
       socket.on('user_notification', (notification: IUser) => {
         toast(<ScorePopup user={notification} onClickHandler={() => setSelectedUser(notification)} />, {});
       });

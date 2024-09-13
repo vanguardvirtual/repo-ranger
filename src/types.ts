@@ -91,3 +91,11 @@ export interface ChatMessage {
   message: string;
   created_at: string; // Update this line
 }
+
+export interface IResponse<T> {
+  status: number;
+  success: boolean;
+  error: string;
+  data: T;
+  message: string;
+}

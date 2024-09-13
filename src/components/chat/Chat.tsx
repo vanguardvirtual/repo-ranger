@@ -77,7 +77,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (isLatestMessagesSuccess) {
-      setMessages(latestMessages.messages);
+      setMessages(latestMessages.data);
     }
   }, [isLatestMessagesSuccess, latestMessages]);
 
