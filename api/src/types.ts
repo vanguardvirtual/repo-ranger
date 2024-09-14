@@ -4,10 +4,10 @@ export interface asyncPropsFunction {
   (req: Request, res: Response, next: NextFunction): any;
 }
 
-export interface IResponse {
+export interface IResponse<T> {
   status: number;
   message: string;
-  data: any;
+  data: T | any;
   error: string;
   success: boolean;
 }

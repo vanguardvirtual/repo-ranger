@@ -1,9 +1,10 @@
 import { ChatMessage, Username } from '@/model';
-import { generateAiDescription, retrieveGithubInformation } from '@/service';
+import { generateAiDescription, generateAiNickname, getUserByUsername, retrieveGithubInformation } from '@/service';
 import { Request, Response } from 'express';
 import { getEmoji } from '@/service';
 import { LessThan, Like } from 'typeorm';
 import { asyncFn, resFn } from '@/utils';
+import { tweetUser, updateTweetsPerformance } from '@/twitter';
 
 export const createUsername = asyncFn(async (req: Request, res: Response) => {
   const { username } = req.body;
@@ -30,7 +31,7 @@ export const createUsername = asyncFn(async (req: Request, res: Response) => {
     });
   }
 
-  const { score, country, favoriteLanguage, contributions, status, name, bio, avatar, followers, following } =
+  const { score, country, favoriteLanguage, contributions, status, name, bio, avatar, followers, following, github_url } =
     await retrieveGithubInformation(username);
 
   if (status == 404) {
@@ -55,6 +56,8 @@ export const createUsername = asyncFn(async (req: Request, res: Response) => {
   newUsername.avatar = avatar;
   newUsername.followers = followers;
   newUsername.following = following;
+  newUsername.ai_nickname = await generateAiNickname(newUsername);
+  newUsername.github_url = github_url;
 
   await newUsername.save();
 
@@ -235,6 +238,62 @@ export const getOlderChatMessages = asyncFn(async (req: Request, res: Response) 
   resFn(res, {
     data: olderMessages.reverse(),
     message: 'Messages fetched',
+    status: 200,
+    success: true,
+    error: '',
+  });
+});
+
+export const sendExampleTweet = asyncFn(async (_req: Request, res: Response) => {
+  const user = await getUserByUsername('AkisKourouklis');
+
+  if (!user) {
+    return resFn(res, {
+      data: null,
+      message: 'User not found',
+      status: 404,
+      success: false,
+      error: 'User not found',
+    });
+  }
+
+  const data = await tweetUser(user);
+
+  if (data.status !== 200) {
+    return resFn(res, {
+      data: null,
+      message: 'Error sending tweet',
+      status: data.status,
+      success: false,
+      error: data.message,
+    });
+  }
+
+  resFn(res, {
+    data: data.data,
+    message: data.message,
+    status: 200,
+    success: true,
+    error: '',
+  });
+});
+
+export const examlpeUpdateTweetsPerformance = asyncFn(async (_req: Request, res: Response) => {
+  const data = await updateTweetsPerformance();
+
+  if (data.status !== 200) {
+    return resFn(res, {
+      data: null,
+      message: data.message,
+      status: data.status,
+      success: false,
+      error: data.error,
+    });
+  }
+
+  resFn(res, {
+    data,
+    message: 'Tweets fetched',
     status: 200,
     success: true,
     error: '',

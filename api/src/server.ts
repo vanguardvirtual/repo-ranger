@@ -10,6 +10,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { setupWebSockets } from '@/sockets';
 import { logger } from '@/utils';
+import { tweetUser } from '@/twitter';
+import cron from 'node-cron';
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -21,6 +23,11 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 const httpServer = createServer(app);
+
+// create tweet cron job every 5 hours
+cron.schedule('0 */5 * * *', async () => {
+  await tweetUser();
+});
 
 async function startApp() {
   await initializeDatabase();
@@ -37,7 +44,16 @@ async function startApp() {
   app.use(cors());
   app.use(express.json());
   app.get('/', (_req, res) => res.send('🚀 Server is running!'));
-  app.use('/api', router);
+  app.use(
+    '/api',
+    (req, res, next) => {
+      if (req.path === '/example-tweet' && req.headers.origin && !req.headers.origin.startsWith('http://localhost:')) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+      next();
+    },
+    router,
+  );
   app.use(limiter);
   app.use(bodyParser.json());
 

@@ -2,9 +2,19 @@ import { asyncPropsFunction } from '@/types';
 import { NextFunction, Request, Response } from 'express';
 import bunyan from 'bunyan';
 import { IResponse } from './types';
+import bunyanFormat from 'bunyan-format';
+
+const formatOut = bunyanFormat({ outputMode: 'short' });
 
 const log = bunyan.createLogger({
   name: 'repo-ranger',
+  streams: [
+    {
+      stream: formatOut,
+      level: 'info',
+    },
+  ],
+  serializers: bunyan.stdSerializers,
 });
 
 export const logger = (type: 'info' | 'error' | 'warn' | 'debug', message: unknown) => {

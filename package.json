@@ -9,7 +9,7 @@
     "start": "serve -s dist -l 3005",
     "preview": "vite preview",
     "lint": "npx eslint --max-warnings=0 src api/src",
-    "lint:fix": "npx eslint --fix src api/src",
+    "lint:fix": "npx eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prepare": "husky"
   },

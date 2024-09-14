@@ -13,7 +13,8 @@
       "@constants/*": ["src/constants/*"],
       "@styles/*": ["src/styles/*"],
       "@config/*": ["src/config/*"],
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@twitter/*": ["src/twitter/*"]
     }
   }
 }

@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { ChatMessage, Username } from './model';
+import { ChatMessage, TwitterPost, Username } from './model';
 import * as mysql from 'mysql2/promise';
 import { asyncFn } from '@/utils';
 
@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
   username: process.env.MYSQLUSER || 'root',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.MYSQL_DATABASE || 'repo-ranger',
-  entities: [Username, ChatMessage],
+  entities: [Username, ChatMessage, TwitterPost],
   synchronize: true,
   logging: false,
 });

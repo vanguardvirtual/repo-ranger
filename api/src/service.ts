@@ -19,6 +19,8 @@ export const retrieveGithubInformation = async (
   name: string;
   followers: number;
   following: number;
+  github_url: string;
+  twitter_username: string;
 }> => {
   const baseUrl = 'https://api.github.com/users/';
   const userResponse = await axios.get(`${baseUrl}${username}`, {
@@ -41,6 +43,8 @@ export const retrieveGithubInformation = async (
       name: '',
       followers: 0,
       following: 0,
+      github_url: '',
+      twitter_username: '',
     };
   }
 
@@ -100,6 +104,8 @@ export const retrieveGithubInformation = async (
     name: userData.name || '',
     followers: userData.followers || 0,
     following: userData.following || 0,
+    github_url: userData.html_url || '',
+    twitter_username: userData.twitter_username || '',
   };
 };
 
@@ -180,4 +186,53 @@ export const generateAiDescription = async (user: Username): Promise<string> => 
   return msg.content[0] && 'text' in msg.content[0]
     ? msg.content[0].text
     : "That user has such a bad profile that we couldn't generate a description for them. 💩";
+};
+
+export const generateAiNickname = async (user: Username): Promise<string> => {
+  if (user.ai_nickname) {
+    return user.ai_nickname;
+  }
+
+  const ai_description = user.ai_description;
+  const username = user.name;
+  const handle = user.username;
+
+  const msg = await anthropic.messages.create({
+    model: 'claude-3-opus-20240229',
+    max_tokens: 100,
+    temperature: 0.2,
+    system: 'I want you to response with just the nickname nothing else. Be sarcastic and funny, you can use an emoji as well.',
+    messages: [
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: `Generate a nickname for ${username} his handle is ${handle} and a small description about him is ${ai_description}`,
+          },
+        ],
+      },
+    ],
+  });
+
+  const nickname = msg.content[0] && 'text' in msg.content[0] ? msg.content[0].text : '';
+
+  user.ai_nickname = nickname;
+  user.save();
+
+  return nickname;
+};
+
+export const getUserByUsername = async (username: string): Promise<Username | null> => {
+  const user = await Username.findOne({
+    where: { username },
+  });
+  return user;
+};
+
+export const getRandomUser = async (): Promise<Username | null> => {
+  const user = await Username.findOne({
+    order: { id: 'ASC' },
+  });
+  return user;
 };

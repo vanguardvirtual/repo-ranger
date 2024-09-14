@@ -1,5 +1,14 @@
 # Changelog
 
+## 14/9/2024
+
+- Connect twitter api
+- Added Extra Points to users
+- Created TwitterPost entity to save all tweets
+- Created example tweet
+- Create CRON jobs for posting random users to twitter
+- Create CRON jobs to add extra point to users based on their promotion performance
+
 ## 13/9/2024
 
 - Created asyncFn handler to not repeat code
