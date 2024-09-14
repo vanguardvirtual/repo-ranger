@@ -30,7 +30,7 @@ export const asyncFn = (fn: asyncPropsFunction) => async (req: Request, res: Res
   }
 };
 
-export const resFn = (res: Response, { status, error, data, message, success }: IResponse) => {
+export const resFn = (res: Response, { status, error, data, message, success }: IResponse<any>) => {
   const suc = success !== undefined ? success : true;
 
   res.status(status).json({
