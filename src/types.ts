@@ -92,7 +92,7 @@ export interface ChatMessage {
   created_at: string; // Update this line
 }
 
-export interface IResponse<T> {
+export interface IResponse<T = any> {
   status: number;
   success: boolean;
   error: string;
