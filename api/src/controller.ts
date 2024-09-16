@@ -58,12 +58,9 @@ export const createUsername = asyncFn(async (req: Request, res: Response) => {
   newUsername.following = following;
   newUsername.ai_nickname = await generateAiNickname(newUsername);
   newUsername.github_url = github_url;
-
-  await newUsername.save();
-
-  const aiDescription = await generateAiDescription(newUsername);
-  newUsername.ai_description = aiDescription;
+  newUsername.ai_description = await generateAiDescription(newUsername);
   newUsername.ai_description_updated_at = new Date();
+
   await newUsername.save();
 
   resFn(res, {

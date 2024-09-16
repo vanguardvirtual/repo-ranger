@@ -65,7 +65,15 @@ const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
               <p>
                 <strong>Blog:</strong>{' '}
                 {data.user.blog ? (
-                  <a href={data.user.blog} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={
+                      data.user.blog.startsWith('http://') || data.user.blog.startsWith('https://')
+                        ? data.user.blog
+                        : `https://${data.user.blog}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {data.user.blog}
                   </a>
                 ) : (
