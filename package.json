@@ -14,7 +14,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "agenda": "^5.0.0",
     "axios": "^1.7.7",
     "husky": "^9.1.5",
     "mongodb": "^6.9.0",

@@ -10,6 +10,9 @@ importers:
       '@anthropic-ai/sdk':
         specifier: ^0.27.3
         version: 0.27.3(encoding@0.1.13)
+      agenda:
+        specifier: ^5.0.0
+        version: 5.0.0(@aws-sdk/client-sso-oidc@3.651.1(@aws-sdk/client-sts@3.651.1))
       axios:
         specifier: ^1.7.7
         version: 1.7.7
@@ -56,9 +59,6 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
     devDependencies:
-      '@types/agenda':
-        specifier: ^4.1.0
-        version: 4.1.0(@aws-sdk/client-sso-oidc@3.651.1(@aws-sdk/client-sts@3.651.1))
       '@types/body-parser':
         specifier: ^1.19.5
         version: 1.19.5
@@ -576,10 +576,6 @@ packages:
   '@tootallnate/once@1.1.2':
     resolution: { integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw== }
     engines: { node: '>= 6' }
-
-  '@types/agenda@4.1.0':
-    resolution: { integrity: sha512-WKWiBRf6pqowRQxeEVSbgx9ncpcyg49r16sWP/ApwnBavgUirDY0uo1ouG3nWp5OcmBJ3oV/Q8WR6DdXQk9RaA== }
-    deprecated: This is a stub types definition. agenda provides its own type definitions, so you do not need this installed.
 
   '@types/body-parser@1.19.5':
     resolution: { integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg== }
@@ -2961,14 +2957,6 @@ snapshots:
 
   '@tootallnate/once@1.1.2':
     optional: true
-
-  '@types/agenda@4.1.0(@aws-sdk/client-sso-oidc@3.651.1(@aws-sdk/client-sts@3.651.1))':
-    dependencies:
-      agenda: 5.0.0(@aws-sdk/client-sso-oidc@3.651.1(@aws-sdk/client-sts@3.651.1))
-    transitivePeerDependencies:
-      - '@aws-sdk/client-sso-oidc'
-      - aws-crt
-      - supports-color
 
   '@types/body-parser@1.19.5':
     dependencies:

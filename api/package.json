@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
+    "agenda": "^5.0.0",
     "axios": "^1.7.7",
     "body-parser": "^1.20.2",
     "bunyan": "^1.8.15",
@@ -33,7 +34,6 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/agenda": "^4.1.0",
     "@types/body-parser": "^1.19.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
