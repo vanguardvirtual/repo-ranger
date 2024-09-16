@@ -254,7 +254,7 @@ export const sendExampleTweet = asyncFn(async (_req: Request, res: Response) => 
     });
   }
 
-  const data = await tweetUser(user);
+  const data = await tweetUser();
 
   if (data.status !== 200) {
     return resFn(res, {

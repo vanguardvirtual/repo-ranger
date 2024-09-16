@@ -1,14 +1,13 @@
 ---
 name: New Enhancement request
 about: Suggest an idea for this project
-title: "[ENHANCEMENT]"
+title: '[ENHANCEMENT]'
 labels: enhancement
 assignees: AkisKourouklis
-
 ---
 
 **Is your feature request related to a problem? Please describe. (optional)**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]. 
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...].
 
 If not leave blank.
 

@@ -231,8 +231,6 @@ export const getUserByUsername = async (username: string): Promise<Username | nu
 };
 
 export const getRandomUser = async (): Promise<Username | null> => {
-  const user = await Username.findOne({
-    order: { id: 'ASC' },
-  });
+  const user = await Username.createQueryBuilder('user').select().orderBy('RAND()').getOne();
   return user;
 };

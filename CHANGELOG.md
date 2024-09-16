@@ -5,6 +5,7 @@
 - Fixed details popup when user does not have https on their blog link it now adds it for them. ([text](https://github.com/vanguardvirtual/repo-ranger/issues/7))
 - Fixed bug on return statement of create user api call. Added the correct interface to the response.
 - Created issue templates for new enhancements and bugs
+- Fixed cron jobs for random user tweets. Added agenda for cron jobs and removed node-cron, also installed mongodb to work with agenda
 
 ## 14/9/2024
 
