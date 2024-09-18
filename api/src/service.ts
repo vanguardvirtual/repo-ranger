@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Username } from '@/model';
 import Anthropic from '@anthropic-ai/sdk';
+import 'dotenv/config';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -127,24 +128,25 @@ export const getTopUsers = async (limit: number): Promise<Username[]> => {
 export const getEmoji = async (score: number): Promise<string> => {
   const topUsers = await getTopUsers(10);
 
-  if (topUsers.length === 0) {
-    return '💩'; // Default emoji if no users exist
+  if (topUsers) {
+    if (topUsers.length === 0) {
+      return '💩'; // Default emoji if no users exist
+    }
+
+    const userRank = topUsers.findIndex((user) => user.score === score) + 1;
+
+    if (userRank === 1) {
+      return '😂'; // Top 1 user gets laugh face
+    }
+
+    if (userRank >= 2 && userRank <= 10) {
+      return '🌟'; // Top 2-10 users get star
+    }
+
+    if (score >= 1000) {
+      return '👏';
+    }
   }
-
-  const userRank = topUsers.findIndex((user) => user.score === score) + 1;
-
-  if (userRank === 1) {
-    return '😂'; // Top 1 user gets laugh face
-  }
-
-  if (userRank >= 2 && userRank <= 10) {
-    return '🌟'; // Top 2-10 users get star
-  }
-
-  if (score >= 1000) {
-    return '👏';
-  }
-
   return '💩';
 };
 
@@ -183,7 +185,7 @@ export const generateAiDescription = async (user: Username): Promise<string> => 
     ],
   });
 
-  return msg.content[0] && 'text' in msg.content[0]
+  return msg?.content[0] && 'text' in msg.content[0]
     ? msg.content[0].text
     : "That user has such a bad profile that we couldn't generate a description for them. 💩";
 };
@@ -215,7 +217,7 @@ export const generateAiNickname = async (user: Username): Promise<string> => {
     ],
   });
 
-  const nickname = msg.content[0] && 'text' in msg.content[0] ? msg.content[0].text : '';
+  const nickname = msg?.content[0] && 'text' in msg.content[0] ? msg.content[0].text : '';
 
   user.ai_nickname = nickname;
   user.save();
