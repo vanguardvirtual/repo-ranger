@@ -8,7 +8,7 @@ jest.mock('@/model', () => {
   class Username {
     static findOne = jest.fn();
     static save = jest.fn();
-    save = jest.fn(); // Instance method
+    save = jest.fn();
   }
   return { Username };
 });
