@@ -5,8 +5,7 @@ import { IsNull } from 'typeorm';
 import express from 'express';
 import { TweetV2PostTweetResult, TwitterApi } from 'twitter-api-v2';
 import { IResponse } from '@/types';
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 
 export const router = express.Router();
 export const TWITTER_STATE = 'my-state';
