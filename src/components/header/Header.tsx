@@ -24,7 +24,7 @@ const Header = () => {
       </p>
       <p className="mb-2">How we calculate your score?</p>
       <p>
-        🤝 Contributions: <b className="underline">+1</b> point for each contribution
+        🤝 Commits: <b className="underline">+1</b> point for each commit
       </p>
       <p>
         👥 Followers: <b className="underline">+3</b> point for each follower
@@ -36,7 +36,7 @@ const Header = () => {
         📁 Repositories: <b className="underline">+2</b> points for each repository
       </p>
       <p>
-        ⭐ Stars: <b className="underline">+2</b> points for each star
+        ⭐ Stars: <b className="underline">+3</b> points for each star
       </p>
       <p>
         🍴 Forks: <b className="underline">+1</b> point for each fork
@@ -46,9 +46,6 @@ const Header = () => {
       </p>
       <p>
         🐛 Issues: <b className="underline">+1</b> point for each issue
-      </p>
-      <p>
-        💬 Comments: <b className="underline">+1</b> point for each comment
       </p>
     </>
   );

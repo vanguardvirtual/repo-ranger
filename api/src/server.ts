@@ -10,8 +10,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { setupWebSockets } from '@/sockets';
 import { logger } from '@/utils';
-import { tweetUser } from '@/twitter';
 import Agenda, { Job } from 'agenda';
+import twitterService from '@/services/twitter.service';
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -34,7 +34,7 @@ async function startApp() {
   // Define the job
   agenda.define('tweet user', async (_job: Job) => {
     logger('info', 'Running scheduled tweet job');
-    await tweetUser();
+    await twitterService.tweetUser();
   });
 
   // Schedule the job

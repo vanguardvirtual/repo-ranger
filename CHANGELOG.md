@@ -4,6 +4,7 @@
 
 - Created tests for controllers and services
 - Updated dependencies
+- Refactored the entire API code to be more clear and organized
 
 ## 16/9/2024
 

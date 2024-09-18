@@ -1,13 +1,14 @@
-import { TwitterPost, Username } from '@/model';
-import { generateAiNickname, getEmoji, getRandomUser } from '@/service';
+import { TwitterApi } from 'twitter-api-v2';
 import { logger } from '@/utils';
-import { IsNull } from 'typeorm';
-import express from 'express';
-import { TweetV2PostTweetResult, TwitterApi } from 'twitter-api-v2';
+import { TweetV2PostTweetResult } from 'twitter-api-v2';
 import { IResponse } from '@/types';
-import 'dotenv/config';
+import { IsNull } from 'typeorm';
+import { Username } from '@/models/username.model';
+import usernameService from '@/services/username.service';
+import { TwitterPost } from '@/models/twitter-posts.model';
+import emojiService from '@/services/emoji.service';
+import aiService from '@/services/ai.service';
 
-export const router = express.Router();
 export const TWITTER_STATE = 'my-state';
 
 const client = new TwitterApi({
@@ -17,13 +18,10 @@ const client = new TwitterApi({
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET as string,
 });
 
-const bearer = new TwitterApi(process.env.TWITTER_BEARER_TOKEN as string);
+const twitterClient = client.readWrite;
 
-export const twitterClient = client.readWrite;
-export const twitterBearer = bearer.readOnly;
-
-export const tweetUser = async (selectedUser?: Username): Promise<IResponse<TweetV2PostTweetResult>> => {
-  const user = selectedUser || (await getRandomUser());
+const tweetUser = async (selectedUser?: Username): Promise<IResponse<TweetV2PostTweetResult>> => {
+  const user = selectedUser || (await usernameService.getRandomUser());
 
   if (!user) {
     logger('error', `User not found`);
@@ -62,12 +60,14 @@ export const tweetUser = async (selectedUser?: Username): Promise<IResponse<Twee
     await user.save();
   }
 
+  const topUsers = await usernameService.getTopUsers(10);
+
   const tweetContentData = {
-    emoji: await getEmoji(user.score),
+    emoji: await emojiService.getEmoji(user.score, topUsers),
     name: user.name,
     username: user.username,
     location: user.location === 'Unknown' ? 'an Unknown location' : user.location,
-    ai_nickname: await generateAiNickname(user),
+    ai_nickname: await aiService.generateAiNickname(user),
     score: user.score,
     fav_language: user.fav_language,
     followers: user.followers,
@@ -117,7 +117,7 @@ ${tweetContentData.github_url ? `Check out their Github: ${tweetContentData.gith
   }
 };
 
-export const updateTweetsPerformance = async (): Promise<IResponse<Username[]>> => {
+const updateTweetsPerformance = async (): Promise<IResponse<Username[]>> => {
   const tweets = await TwitterPost.find({
     where: {
       cron_check: IsNull(),
@@ -173,3 +173,11 @@ export const updateTweetsPerformance = async (): Promise<IResponse<Username[]>> 
     success: true,
   };
 };
+
+const sendExampleTweet = async () => {
+  const user = await usernameService.findByUsername('AkisKourouklis');
+  const tweet = await tweetUser(user);
+  return tweet;
+};
+
+export default { tweetUser, updateTweetsPerformance, sendExampleTweet };

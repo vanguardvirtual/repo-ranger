@@ -1,14 +1,10 @@
 import { Server, Socket } from 'socket.io';
-import { Username, ChatMessage } from './model';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, EventSubscriber, DataSource } from 'typeorm';
 import { logger } from '@/utils';
-
-interface ChatMessageData {
-  id: number;
-  username: string;
-  message: string;
-  timestamp: string;
-}
+import { Username } from '@/models/username.model';
+import { ChatMessageData } from '@/types/messages.interface';
+import messageService from '@/services/message.service';
+import usernameService from '@/services/username.service';
 
 export function setupWebSockets(io: Server, dataSource: DataSource) {
   io.on('connection', async (socket: Socket) => {
@@ -18,10 +14,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
     socket.on('chat message', async (data: { username: string; message: string }) => {
       try {
-        const newMessage = new ChatMessage();
-        newMessage.username = data.username;
-        newMessage.message = data.message;
-        await newMessage.save();
+        const newMessage = await messageService.saveChatMessage(data.message, data.username);
 
         const chatMessageData: ChatMessageData = {
           id: newMessage.id,
@@ -38,11 +31,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
     socket.on('load more messages', async (oldestMessageId: number) => {
       try {
-        const olderMessages = await ChatMessage.find({
-          where: { id: oldestMessageId },
-          order: { created_at: 'DESC' },
-          take: 5,
-        });
+        const olderMessages = await messageService.getOlderChatMessages(oldestMessageId);
 
         const chatMessageData: ChatMessageData[] = olderMessages.map((msg) => ({
           id: msg.id,
@@ -59,10 +48,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
     // Send the latest 50 messages to the newly connected client
     try {
-      const latestMessages = await ChatMessage.find({
-        order: { created_at: 'DESC' },
-        take: 50,
-      });
+      const latestMessages = await messageService.getLatestChatMessages();
 
       const chatMessageData: ChatMessageData[] = latestMessages.map((msg) => ({
         id: msg.id,
@@ -78,7 +64,7 @@ export function setupWebSockets(io: Server, dataSource: DataSource) {
 
     const interval = setInterval(async () => {
       try {
-        const randomUser = await Username.createQueryBuilder('username').orderBy('RAND()').getOne();
+        const randomUser = await usernameService.getRandomUser();
 
         if (randomUser) {
           sendUserNotification(socket, randomUser);

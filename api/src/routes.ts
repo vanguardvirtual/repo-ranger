@@ -1,25 +1,17 @@
 import express from 'express';
-import {
-  createUsername,
-  getUsernames,
-  refreshScore,
-  getUsernameById,
-  searchUsernames,
-  getLatestChatMessages,
-  getOlderChatMessages,
-  sendExampleTweet,
-  examlpeUpdateTweetsPerformance,
-} from '@/controller';
+import usernameController from '@/controllers/username.controller';
+import messageController from '@/controllers/message.controller';
+import twitterController from '@/controllers/twitter.controller';
 
 export const router = express.Router();
 
-router.post('/create', createUsername);
-router.get('/', getUsernames);
-router.get('/refresh/:id', refreshScore);
-router.get('/single/:id', getUsernameById);
-router.get('/search', searchUsernames);
-router.get('/example-tweet', sendExampleTweet);
-router.get('/example-update-tweets-performance', examlpeUpdateTweetsPerformance);
+router.post('/create', usernameController.createUsername);
+router.get('/', usernameController.getUsernames);
+router.get('/refresh/:id', usernameController.refreshUsername);
+router.get('/single/:id', usernameController.getUsernameById);
+router.get('/search', usernameController.searchUsernamesSortedByScore);
+router.get('/example-tweet', twitterController.sendExampleTweet);
+router.get('/example-update-tweets-performance', twitterController.updateTweetsPerformance);
 
-router.get('/chat/messages', getLatestChatMessages);
-router.get('/chat/messages/:oldestMessageId', getOlderChatMessages);
+router.get('/chat/messages', messageController.getLatestChatMessages);
+router.get('/chat/messages/:oldestMessageId', messageController.getOlderChatMessages);

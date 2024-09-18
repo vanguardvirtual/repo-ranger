@@ -4,6 +4,10 @@ export interface asyncPropsFunction {
   (req: Request, res: Response, next: NextFunction): any;
 }
 
+export interface asyncPropsFunctionData<T> {
+  (data: T): Promise<T>;
+}
+
 export interface IResponse<T> {
   status: number;
   message: string;
