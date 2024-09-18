@@ -66,7 +66,7 @@ export const tweetUser = async (selectedUser?: Username): Promise<IResponse<Twee
     emoji: await getEmoji(user.score),
     name: user.name,
     username: user.username,
-    location: user.location,
+    location: user.location === 'Unknown' ? 'an Unknown location' : user.location,
     ai_nickname: await generateAiNickname(user),
     score: user.score,
     fav_language: user.fav_language,
@@ -78,12 +78,12 @@ export const tweetUser = async (selectedUser?: Username): Promise<IResponse<Twee
   };
 
   const tweetContent = `${tweetContentData.username} from ${tweetContentData.location}, the ${tweetContentData.ai_nickname}
-\n Score: ${tweetContentData.score}
+\nScore: ${tweetContentData.score}
 Followers: ${tweetContentData.followers}
 Fav language: ${tweetContentData.fav_language}
 Emoji: ${tweetContentData.emoji}\n
-${tweetContentData.twitter_username ? `Check out their X: ${tweetContentData.x_url} (@${tweetContentData.twitter_username})` : null}
-${tweetContentData.github_url ? `Check out their Github: ${tweetContentData.github_url}` : null}
+${tweetContentData.twitter_username ? `Check out their X: ${tweetContentData.x_url} (@${tweetContentData.twitter_username})` : ''}
+${tweetContentData.github_url ? `Check out their Github: ${tweetContentData.github_url}` : ''}
     `;
 
   try {
