@@ -1,5 +1,10 @@
 # Changelog
 
+## 18/9/2024
+
+- Created tests for controllers and services
+- Updated dependencies
+
 ## 16/9/2024
 
 - Fixed details popup when user does not have https on their blog link it now adds it for them. ([text](https://github.com/vanguardvirtual/repo-ranger/issues/7))
