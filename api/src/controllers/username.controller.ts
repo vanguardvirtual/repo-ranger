@@ -157,6 +157,8 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
     commits,
     pullRequests,
   });
+  const ai_description = await aiService.generateAiDescription(username);
+  const ai_nickname = await aiService.generateAiNickname(username);
   const updatedUsername = await usernameService.updateUsername({
     username: username.username,
     score,
@@ -166,8 +168,8 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
     avatar: userData.avatar_url,
     bio: userData.bio || '',
     name: userData.name,
-    ai_description: '',
-    ai_nickname: '',
+    ai_description,
+    ai_nickname,
     followers: userData.followers || 0,
     following: userData.following || 0,
     github_url: userData.html_url,
