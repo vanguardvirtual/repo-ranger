@@ -15,6 +15,7 @@ const refreshUsernames = async (job: Job) => {
   if (!lastProcessedUserId) {
     logger('info', 'No last processed user ID found, initializing job state');
     jobState = await jobStateRepository.findOne({ where: { jobName: 'refreshUsernames' } });
+    lastProcessedUserId = jobState?.lastProcessedUserId || 0;
     if (!jobState) {
       logger('info', 'No job state found, creating new job state');
       jobState = new JobState();
