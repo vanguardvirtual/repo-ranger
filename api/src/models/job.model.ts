@@ -5,7 +5,7 @@ export class JobState {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   jobName!: string;
 
   @Column({ type: 'int', nullable: true })
