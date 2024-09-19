@@ -5,7 +5,7 @@
     "strict": true,
     "moduleResolution": "node",
     "noEmit": true,
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
@@ -13,7 +13,6 @@
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
