@@ -64,6 +64,9 @@ export class Username extends BaseEntity {
   @CreateDateColumn({ type: 'datetime' })
   created_at!: Date;
 
+  @Column({ type: 'datetime', nullable: true })
+  updated_at!: Date;
+
   total_score(): number {
     return this.score + this.extra_score;
   }

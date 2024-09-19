@@ -4,6 +4,8 @@
 
 - Updated the husky pre-commit hook to run tests before committing
 - Updated tests to work with the new api structure
+- Removed refresh score from endpoint and moved it to a cron job
+- Removed refresh score from user details view
 
 ## 18/9/2024
 

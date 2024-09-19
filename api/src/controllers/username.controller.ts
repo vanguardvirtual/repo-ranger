@@ -162,7 +162,7 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
   const updatedUsername = await usernameService.updateUsername({
     username: username.username,
     score,
-    location: userData.location || '',
+    location: userData.location || 'Earth',
     fav_language: favLanguage,
     contributions: 0,
     avatar: userData.avatar_url,

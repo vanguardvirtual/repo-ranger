@@ -10,8 +10,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { setupWebSockets } from '@/sockets';
 import { logger } from '@/utils';
-import Agenda, { Job } from 'agenda';
-import twitterService from '@/services/twitter.service';
+import { startAgenda, stopAgenda } from '@/agenda';
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -24,26 +23,9 @@ const port = process.env.PORT || 3000;
 const app = express();
 const httpServer = createServer(app);
 
-const agenda = new Agenda({
-  db: { address: process.env.MONGODB_URI as string },
-});
-
 async function startApp() {
   await initializeDatabase();
-
-  // Define the job
-  agenda.define('tweet user', async (_job: Job) => {
-    logger('info', 'Running scheduled tweet job');
-    await twitterService.tweetUser();
-  });
-
-  // Schedule the job
-  await agenda.every('5 hours', 'tweet user');
-
-  // Start Agenda
-  await agenda.start();
-
-  logger('info', 'Agenda started and tweet job scheduled');
+  await startAgenda();
 
   const io = new Server(httpServer, {
     cors: {
@@ -80,6 +62,6 @@ startApp().catch((error) => logger('error', error));
 // Graceful shutdown
 process.on('SIGTERM', async () => {
   logger('info', 'SIGTERM signal received: closing HTTP server');
-  await agenda.stop();
+  stopAgenda();
   process.exit(0);
 });

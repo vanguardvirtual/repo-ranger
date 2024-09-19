@@ -7,7 +7,6 @@ export const router = express.Router();
 
 router.post('/create', usernameController.createUsername);
 router.get('/', usernameController.getUsernames);
-router.get('/refresh/:id', usernameController.refreshUsername);
 router.get('/single/:id', usernameController.getUsernameById);
 router.get('/search', usernameController.searchUsernamesSortedByScore);
 router.get('/example-tweet', twitterController.sendExampleTweet);
