@@ -30,6 +30,12 @@ const refreshUsernames = async (job: Job) => {
   if (!currentUser) {
     logger('info', `No user in the database with ID ${lastProcessedUserId}`);
 
+    // Reset lastProcessedUserId to 0 if it exceeds 10
+    if (lastProcessedUserId > 10) {
+      lastProcessedUserId = 0;
+      logger('info', 'Resetting last processed user ID to 0');
+    }
+
     if (jobState) {
       jobState.lastProcessedUserId = lastProcessedUserId + 1;
       await jobStateRepository.save(jobState);
