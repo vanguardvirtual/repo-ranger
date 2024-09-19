@@ -1,7 +1,7 @@
-import { Username } from '@/models/username.model';
-import aiService from '@/services/ai.service';
+import { Username } from '@models/username.model';
+import aiService from '@services/ai.service';
 
-jest.mock('@/models/username.model', () => {
+jest.mock('@models/username.model', () => {
   return {
     Username: jest.fn().mockImplementation(() => ({
       username: 'mockuser',
@@ -24,8 +24,8 @@ jest.mock('@/models/username.model', () => {
     })),
   };
 });
-jest.mock('@/services/username.service');
-jest.mock('@/services/ai.service');
+jest.mock('@services/username.service');
+jest.mock('@services/ai.service');
 
 describe('aiService', () => {
   describe('generateAiDescription', () => {

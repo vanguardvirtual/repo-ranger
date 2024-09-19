@@ -1,4 +1,4 @@
-import { GithubPullRequest, GithubRepo, GithubUserCommits } from '@/types/github.interface';
+import { GithubPullRequest, GithubRepo, GithubUserCommits } from '@Itypes/github.interface';
 
 export interface IScoreDataProps {
   reposData: GithubRepo[];

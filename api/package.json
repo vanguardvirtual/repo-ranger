@@ -8,8 +8,9 @@
     "test": "jest --coverage",
     "type-check": "tsc",
     "build": "rimraf dist && tsc --noEmit false && tsc-alias",
-    "start": "node dist/server.js",
-    "dev": "NODE_ENV=development tsx watch src/server --project tsconfig.json"
+    "start": "node dist/src/server.js",
+    "dev": "NODE_ENV=development tsx watch src/server --project tsconfig.json",
+    "build-start": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",

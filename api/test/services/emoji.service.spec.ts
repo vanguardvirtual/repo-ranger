@@ -1,8 +1,8 @@
-import emojiService from '@/services/emoji.service';
-import usernameService from '@/services/username.service';
+import emojiService from '@services/emoji.service';
+import usernameService from '@services/username.service';
 
-jest.mock('@/models/username.model');
-jest.mock('@/services/username.service', () => ({
+jest.mock('@models/username.model');
+jest.mock('@services/username.service', () => ({
   getTopUsers: jest.fn().mockResolvedValue([
     {
       score: 1700,

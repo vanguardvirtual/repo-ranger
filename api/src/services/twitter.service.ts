@@ -1,13 +1,13 @@
 import { TwitterApi } from 'twitter-api-v2';
-import { logger } from '@/utils';
+import { logger } from '@utils/utils';
 import { TweetV2PostTweetResult } from 'twitter-api-v2';
-import { IResponse } from '@/types';
+import { IResponse } from '@Itypes/types';
 import { IsNull } from 'typeorm';
-import { Username } from '@/models/username.model';
-import usernameService from '@/services/username.service';
-import { TwitterPost } from '@/models/twitter-posts.model';
-import emojiService from '@/services/emoji.service';
-import aiService from '@/services/ai.service';
+import { Username } from '@models/username.model';
+import usernameService from '@services/username.service';
+import { TwitterPost } from '@models/twitter-posts.model';
+import emojiService from '@services/emoji.service';
+import aiService from '@services/ai.service';
 
 export const TWITTER_STATE = 'my-state';
 

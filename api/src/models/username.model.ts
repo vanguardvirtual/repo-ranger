@@ -1,5 +1,5 @@
-import { TwitterPost } from '@/models/twitter-posts.model';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity, Index, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity, Index, OneToMany, Relation } from 'typeorm';
+import { TwitterPost } from './twitter-posts.model';
 
 @Entity('usernames')
 @Index(['score'])
@@ -59,7 +59,7 @@ export class Username extends BaseEntity {
   ai_description_updated_at!: Date;
 
   @OneToMany(() => TwitterPost, (twitter_post: TwitterPost) => twitter_post.username)
-  twitter_posts!: TwitterPost[];
+  twitter_posts!: Relation<TwitterPost[]>;
 
   @CreateDateColumn({ type: 'datetime' })
   created_at!: Date;

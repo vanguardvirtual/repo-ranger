@@ -1,9 +1,9 @@
-import reposService from '@/services/repos.service';
-import { Repo } from '@/models/repos.model';
-import { Username } from '@/models/username.model';
+import reposService from '@services/repos.service';
+import { Repo } from '@models/repos.model';
+import { Username } from '@models/username.model';
 
-jest.mock('@/models/repos.model');
-jest.mock('@/models/username.model');
+jest.mock('@models/repos.model');
+jest.mock('@models/username.model');
 
 describe('Repos Service', () => {
   beforeEach(() => {

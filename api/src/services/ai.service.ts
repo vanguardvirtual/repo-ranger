@@ -1,5 +1,5 @@
-import usernameService from '@/services/username.service';
-import { Username } from '@/models/username.model';
+import usernameService from '@services/username.service';
+import { Username } from '@models/username.model';
 import { Anthropic } from '@anthropic-ai/sdk';
 
 const anthropic = new Anthropic({

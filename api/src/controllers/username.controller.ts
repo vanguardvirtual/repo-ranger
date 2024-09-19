@@ -1,10 +1,10 @@
-import aiService from '@/services/ai.service';
-import emojiService from '@/services/emoji.service';
-import githubService from '@/services/github.service';
-import scoreService from '@/services/score.service';
-import usernameService from '@/services/username.service';
-import { UsernameDTO } from '@/types/username.interface';
-import { asyncFn, resFn } from '@/utils';
+import aiService from '@services/ai.service';
+import emojiService from '@services/emoji.service';
+import githubService from '@services/github.service';
+import scoreService from '@services/score.service';
+import usernameService from '@services/username.service';
+import { UsernameDTO } from '@Itypes/username.interface';
+import { asyncFn, resFn } from '@utils/utils';
 import { NextFunction, Request, Response } from 'express';
 
 const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFunction) => {

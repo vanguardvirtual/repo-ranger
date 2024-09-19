@@ -1,11 +1,11 @@
 import { DataSource } from 'typeorm';
 import * as mysql from 'mysql2/promise';
-import { asyncFn } from '@/utils';
-import { Username } from '@/models/username.model';
-import { ChatMessage } from '@/models/message.model';
-import { TwitterPost } from '@/models/twitter-posts.model';
-import { Repo } from '@/models/repos.model';
-import { JobState } from '@/models/job.model';
+import { asyncFn } from '@utils/utils';
+import { Username } from '@models/username.model';
+import { ChatMessage } from '@models/message.model';
+import { TwitterPost } from '@models/twitter-posts.model';
+import { Repo } from '@models/repos.model';
+import { JobState } from '@models/job.model';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',

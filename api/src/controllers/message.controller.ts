@@ -1,6 +1,6 @@
-import { asyncFn, resFn } from '@/utils';
+import { asyncFn, resFn } from '@utils/utils';
 import { NextFunction, Request, Response } from 'express';
-import messageService from '@/services/message.service';
+import messageService from '@services/message.service';
 
 const getLatestChatMessages = asyncFn(async (_req: Request, res: Response, _next: NextFunction) => {
   const messages = await messageService.getLatestChatMessages();

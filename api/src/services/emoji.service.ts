@@ -1,4 +1,4 @@
-import { Username } from '@/models/username.model';
+import { Username } from '@models/username.model';
 
 const getEmoji = (score: number, topUsers: Username[]): string => {
   if (topUsers) {

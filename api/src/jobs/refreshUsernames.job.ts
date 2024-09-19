@@ -1,10 +1,10 @@
-import AppDataSource from '@/database';
-import { JobState } from '@/models/job.model';
-import aiService from '@/services/ai.service';
-import githubService from '@/services/github.service';
-import scoreService from '@/services/score.service';
-import usernameService from '@/services/username.service';
-import { logger } from '@/utils';
+import AppDataSource from '../db/database';
+import { JobState } from '@models/job.model';
+import aiService from '@services/ai.service';
+import githubService from '@services/github.service';
+import scoreService from '@services/score.service';
+import usernameService from '@services/username.service';
+import { logger } from '@utils/utils';
 import { Job } from 'agenda';
 
 const refreshUsernames = async (job: Job) => {

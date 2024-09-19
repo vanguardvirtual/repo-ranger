@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "module": "ESNext",
     "esModuleInterop": true,
     "strict": true,
     "moduleResolution": "node",
-    "noEmit": true,
-    "rootDir": "./src",
+    "noEmit": false,
+    "rootDir": ".",
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
@@ -15,7 +16,20 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@models/*": ["./src/models/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@services/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@config/*": ["./src/config/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@Itypes/*": ["./src/types/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@jobs/*": ["./src/jobs/*"],
+      "@db": ["src/db/*"],
+      "@sockets": ["src/sockets/*"],
+      "@agenda": ["src/agenda/*"]
     },
     "types": ["node", "jest"]
   },

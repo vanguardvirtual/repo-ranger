@@ -1,16 +1,16 @@
 import cors from 'cors';
 import express from 'express';
 import 'dotenv/config';
-import { router } from '@/routes';
+import { router } from './routes/routes';
 import 'reflect-metadata';
-import AppDataSource, { initializeDatabase } from './database';
+import AppDataSource, { initializeDatabase } from './db/database';
 import rateLimit from 'express-rate-limit';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { setupWebSockets } from '@/sockets';
-import { logger } from '@/utils';
-import { startAgenda, stopAgenda } from '@/agenda';
+import { setupWebSockets } from './sockets/sockets';
+import { logger } from '@utils/utils';
+import { startAgenda, stopAgenda } from './agenda/agenda';
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute

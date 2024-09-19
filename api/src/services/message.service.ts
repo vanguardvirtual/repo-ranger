@@ -1,4 +1,4 @@
-import { ChatMessage } from '@/models/message.model';
+import { ChatMessage } from '@models/message.model';
 import { LessThan } from 'typeorm';
 
 const getLatestChatMessages = async () => {

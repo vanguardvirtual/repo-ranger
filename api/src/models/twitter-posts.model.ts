@@ -1,5 +1,5 @@
-import { Username } from '@/models/username.model';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Relation } from 'typeorm';
+import { Username } from './username.model';
 
 @Entity('twitter_posts')
 export class TwitterPost extends BaseEntity {
@@ -24,6 +24,6 @@ export class TwitterPost extends BaseEntity {
   @Column({ type: 'datetime' })
   created_at!: Date;
 
-  @ManyToOne(() => Username, (username: Username) => username.twitter_posts)
-  username!: Username;
+  @ManyToOne(() => Username, (username: Username) => username.twitter_posts, { lazy: true })
+  username!: Relation<Username>;
 }

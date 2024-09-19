@@ -1,7 +1,6 @@
-import { asyncPropsFunction } from '@/types';
+import { asyncPropsFunction, IResponse } from '../types/types';
 import { NextFunction, Request, Response } from 'express';
 import bunyan from 'bunyan';
-import { IResponse } from './types';
 import bunyanFormat from 'bunyan-format';
 
 const formatOut = bunyanFormat({ outputMode: 'short' });

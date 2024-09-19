@@ -1,5 +1,5 @@
-import twitterService from '@/services/twitter.service';
-import { logger } from '@/utils';
+import twitterService from '@services/twitter.service';
+import { logger } from '@utils/utils';
 
 const tweetUser = async () => {
   logger('info', 'Running scheduled tweet job');

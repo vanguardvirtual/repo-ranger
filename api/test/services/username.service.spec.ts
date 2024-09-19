@@ -1,11 +1,11 @@
-import usernameService from '@/services/username.service';
-import githubService from '@/services/github.service';
-import scoreService from '@/services/score.service';
-import { Username } from '@/models/username.model';
+import usernameService from '@services/username.service';
+import githubService from '@services/github.service';
+import scoreService from '@services/score.service';
+import { Username } from '@models/username.model';
 
-jest.mock('@/models/username.model');
-jest.mock('@/services/github.service');
-jest.mock('@/services/score.service');
+jest.mock('@models/username.model');
+jest.mock('@services/github.service');
+jest.mock('@services/score.service');
 
 describe('Username Service Tests', () => {
   beforeEach(() => {

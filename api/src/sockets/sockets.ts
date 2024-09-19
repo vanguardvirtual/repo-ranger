@@ -1,10 +1,10 @@
 import { Server, Socket } from 'socket.io';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, EventSubscriber, DataSource } from 'typeorm';
-import { logger } from '@/utils';
-import { Username } from '@/models/username.model';
-import { ChatMessageData } from '@/types/messages.interface';
-import messageService from '@/services/message.service';
-import usernameService from '@/services/username.service';
+import { logger } from '../utils/utils';
+import { Username } from '@models/username.model';
+import { ChatMessageData } from '@Itypes/messages.interface';
+import messageService from '@services/message.service';
+import usernameService from '@services/username.service';
 
 export function setupWebSockets(io: Server, dataSource: DataSource) {
   io.on('connection', async (socket: Socket) => {

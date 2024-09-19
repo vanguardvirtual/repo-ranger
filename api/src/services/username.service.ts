@@ -1,7 +1,7 @@
-import { Username } from '@/models/username.model';
-import githubService from '@/services/github.service';
-import scoreService from '@/services/score.service';
-import { UsernameDTO } from '@/types/username.interface';
+import { Username } from '@models/username.model';
+import githubService from '@services/github.service';
+import scoreService from '@services/score.service';
+import { UsernameDTO } from '@Itypes/username.interface';
 import { Like } from 'typeorm';
 
 const createUsername = async (data: UsernameDTO) => {

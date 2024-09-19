@@ -6,6 +6,8 @@
 - Updated tests to work with the new api structure
 - Removed refresh score from endpoint and moved it to a cron job
 - Removed refresh score from user details view
+- Update alias for import
+- Fixed problem with circular dependency
 
 ## 18/9/2024
 

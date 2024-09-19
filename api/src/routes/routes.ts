@@ -1,7 +1,7 @@
 import express from 'express';
-import usernameController from '@/controllers/username.controller';
-import messageController from '@/controllers/message.controller';
-import twitterController from '@/controllers/twitter.controller';
+import usernameController from '@controllers/username.controller';
+import messageController from '@controllers/message.controller';
+import twitterController from '@controllers/twitter.controller';
 
 export const router = express.Router();
 

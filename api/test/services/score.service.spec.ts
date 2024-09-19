@@ -1,9 +1,9 @@
-import scoreService from '@/services/score.service';
-import { Username } from '@/models/username.model';
-import { IScoreDataProps } from '@/types/score.interface';
-import { GithubRepo } from '@/types/github.interface';
+import scoreService from '@services/score.service';
+import { Username } from '@models/username.model';
+import { IScoreDataProps } from '@Itypes/score.interface';
+import { GithubRepo } from '@Itypes/github.interface';
 
-jest.mock('@/models/username.model');
+jest.mock('@models/username.model');
 
 describe('Score Service', () => {
   beforeEach(() => {

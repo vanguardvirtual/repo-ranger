@@ -1,5 +1,5 @@
-import { GithubGetAllDataResponse, GithubRepo, GithubUser, GithubUserCommits } from '@/types/github.interface';
-import { logger } from '@/utils';
+import { GithubGetAllDataResponse, GithubRepo, GithubUser, GithubUserCommits } from '@Itypes/github.interface';
+import { logger } from '@utils/utils';
 import axios from 'axios';
 
 const getGithubUserInformation = async (username: string): Promise<GithubUser> => {

@@ -1,6 +1,6 @@
-import messageService from '@/services/message.service';
+import messageService from '@services/message.service';
 
-jest.mock('@/models/message.model');
+jest.mock('@models/message.model');
 
 describe('messageService', () => {
   describe('getLatestChatMessages', () => {

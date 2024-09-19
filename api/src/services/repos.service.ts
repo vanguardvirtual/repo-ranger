@@ -1,5 +1,5 @@
-import { Repo } from '@/models/repos.model';
-import { Username } from '@/models/username.model';
+import { Repo } from '@models/repos.model';
+import { Username } from '@models/username.model';
 
 const getReposByUsername = async (username: string) => {
   const usernameId = await Username.findOne({ where: { username } });

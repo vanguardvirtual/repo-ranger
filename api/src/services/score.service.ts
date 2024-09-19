@@ -1,5 +1,5 @@
-import { Username } from '@/models/username.model';
-import { IScoreDataProps } from '@/types/score.interface';
+import { Username } from '@models/username.model';
+import { IScoreDataProps } from '@Itypes/score.interface';
 
 const calculateScore = async (data: IScoreDataProps) => {
   const { reposData, commits: commitsData, pullRequests: pullRequestsData } = data;

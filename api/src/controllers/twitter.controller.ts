@@ -1,4 +1,4 @@
-import twitterService from '@/services/twitter.service';
+import twitterService from '@services/twitter.service';
 
 const sendExampleTweet = async () => {
   const tweet = await twitterService.sendExampleTweet();
