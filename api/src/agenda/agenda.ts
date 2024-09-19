@@ -9,12 +9,22 @@ const agendaS = new Agenda({
 
 export const startAgenda = async () => {
   agendaS.define('tweet user', async (_job: Job) => {
-    await tweetUser();
+    try {
+      await tweetUser();
+    } catch (error) {
+      logger('error', `Error in tweet user job: ${JSON.stringify(error)}`);
+    }
   });
   await agendaS.every('5 hours', 'tweet user');
 
   agendaS.define('refresh usernames', async (job: Job) => {
-    await refreshUsernames(job);
+    try {
+      logger('info', 'Refresh usernames job triggered');
+      await refreshUsernames(job);
+      logger('info', 'Refresh usernames job completed successfully');
+    } catch (error) {
+      logger('error', `Error in refresh usernames job: ${JSON.stringify(error)}`);
+    }
   });
   await agendaS.every('10 seconds', 'refresh usernames');
 
