@@ -8,6 +8,7 @@
 - Removed refresh score from user details view
 - Update alias for import
 - Fixed problem with circular dependency
+- Made cron job to only work on production
 
 ## 18/9/2024
 
