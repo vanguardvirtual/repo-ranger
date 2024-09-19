@@ -4,7 +4,9 @@ import { logger } from '@utils/utils';
 import Agenda, { Job } from 'agenda';
 
 const agendaS = new Agenda({
-  db: { address: process.env.MONGODB_URI as string },
+  db: { address: process.env.MONGODB_URI as string, collection: 'agendaJobs' },
+  defaultLockLifetime: 1000 * 60 * 10, // 10 minutes
+  defaultLockLimit: 10,
 });
 
 export const startAgenda = async () => {
