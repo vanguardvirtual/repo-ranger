@@ -1,5 +1,10 @@
 # Changelog
 
+## 19/9/2024
+
+- Updated the husky pre-commit hook to run tests before committing
+- Updated tests to work with the new api structure
+
 ## 18/9/2024
 
 - Created tests for controllers and services

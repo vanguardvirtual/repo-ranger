@@ -6,7 +6,7 @@ const getEmoji = (score: number, topUsers: Username[]): string => {
       return '💩'; // Default emoji if no users exist
     }
 
-    const userRank = topUsers.findIndex((user) => user.score === score) + 1;
+    const userRank = topUsers.findIndex((user) => user.score <= score) + 1;
 
     if (userRank === 1) {
       return '😂'; // Top 1 user gets laugh face

@@ -1,50 +1,29 @@
 import { Repo } from '@/models/repos.model';
 import { Username } from '@/models/username.model';
-import { asyncFnData } from '@/utils';
 
-const getReposByUsername = asyncFnData(async (username: string) => {
+const getReposByUsername = async (username: string) => {
   const usernameId = await Username.findOne({ where: { username } });
   if (!usernameId) {
-    return {
-      success: false,
-      data: null,
-      error: 'Username not found',
-    };
+    throw new Error('Username not found');
   }
 
   const repos = await Repo.find({ where: { username_id: usernameId.id } });
-  return {
-    success: true,
-    data: repos,
-    error: '',
-  };
-});
+  return repos;
+};
 
-const getAllRepos = asyncFnData(async () => {
+const getAllRepos = async () => {
   const repos = await Repo.find();
-  return {
-    success: true,
-    data: repos,
-    error: '',
-  };
-});
+  return repos;
+};
 
-const createRepo = asyncFnData(async (repo: Repo) => {
+const createRepo = async (repo: Repo) => {
   const newRepo = await Repo.create(repo);
-  return {
-    success: true,
-    data: newRepo,
-    error: '',
-  };
-});
+  return newRepo;
+};
 
-const updateRepo = asyncFnData(async (repo: Repo) => {
+const updateRepo = async (repo: Repo) => {
   const updatedRepo = await Repo.update(repo.id, repo);
-  return {
-    success: true,
-    data: updatedRepo,
-    error: '',
-  };
-});
+  return updatedRepo;
+};
 
 export default { getReposByUsername, getAllRepos, createRepo, updateRepo };

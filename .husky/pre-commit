@@ -4,5 +4,10 @@ npx eslint --max-warnings=0 src api/src || {
   exit 1
 }
 
-npx prettier --write .
+cd ./api && npx jest || {
+  echo "Tests failed. Commit aborted."
+  exit 1
+}
+
+cd .. && npx prettier --write .
 git update-index --again

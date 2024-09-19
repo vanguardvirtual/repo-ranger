@@ -67,6 +67,9 @@ const getGithubUserCommits = async (username: string, repos: GithubRepo[]): Prom
     const commits = [];
     for (let i = 0; i < Math.min(repos.length, 10); i++) {
       const repo = repos[i];
+      if (!repo) {
+        continue;
+      }
       const response = await axios.get(`https://api.github.com/repos/${username}/${repo.name}/commits?author=${username}&per_page=100`, {
         headers: {
           Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,

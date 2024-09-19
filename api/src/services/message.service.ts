@@ -2,10 +2,11 @@ import { ChatMessage } from '@/models/message.model';
 import { LessThan } from 'typeorm';
 
 const getLatestChatMessages = async () => {
-  const messages = await ChatMessage.find({
-    order: { created_at: 'DESC' },
-    take: 50,
-  });
+  const messages =
+    (await ChatMessage.find({
+      order: { created_at: 'DESC' },
+      take: 50,
+    })) || []; // Ensure messages is an array
   return messages.reverse();
 };
 
@@ -29,7 +30,7 @@ const saveChatMessage = async (message: string, username: string) => {
 };
 
 const getChatMessages = async () => {
-  const messages = await ChatMessage.find();
+  const messages = (await ChatMessage.find()) || []; // Ensure messages is an array
   return messages;
 };
 
