@@ -22,10 +22,13 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 const httpServer = createServer(app);
+const isProduction = process.env.NODE_ENV === 'production';
 
 async function startApp() {
   await initializeDatabase();
-  await startAgenda();
+  if (isProduction) {
+    await startAgenda();
+  }
 
   const io = new Server(httpServer, {
     cors: {

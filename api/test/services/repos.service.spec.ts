@@ -66,4 +66,22 @@ describe('Repos Service', () => {
       expect(Repo.update).toHaveBeenCalledWith(mockRepo.id, mockRepo);
     });
   });
+
+  describe('createMultipleRepos', () => {
+    it('should create multiple repos', async () => {
+      const mockRepos = [
+        { id: 1, name: 'repo1' },
+        { id: 2, name: 'repo2' },
+      ];
+      (Repo.create as jest.Mock).mockResolvedValue(mockRepos);
+      const reposToSave = mockRepos.map((repo) => {
+        const newRepo = new Repo();
+        newRepo.id = repo.id;
+        newRepo.name = repo.name;
+        return newRepo;
+      });
+      const repos = await reposService.createMultipleRepos(reposToSave);
+      expect(repos).toBeDefined();
+    });
+  });
 });

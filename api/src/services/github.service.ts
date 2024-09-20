@@ -1,3 +1,4 @@
+import { GithubEvent } from '@Itypes/events.interface';
 import { GithubGetAllDataResponse, GithubRepo, GithubUser, GithubUserCommits } from '@Itypes/github.interface';
 import { logger } from '@utils/utils';
 import axios from 'axios';
@@ -110,12 +111,28 @@ const getGithubUserFavLanguage = async (reposData: GithubRepo[]) => {
   return favoriteLanguage;
 };
 
+const getGithubUserEvents = async (username: string): Promise<GithubEvent[]> => {
+  try {
+    const response = await axios.get(`https://api.github.com/users/${username}/events?per_page=100`, {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    logger('error', JSON.stringify(error));
+    throw new Error('Failed to get user data');
+  }
+};
+
 const getGithubUserAllData = async (username: string): Promise<GithubGetAllDataResponse> => {
   const reposData = await getGithubUserRepositories(username);
   const followersData = await getGithubUserFollowers(username);
   const followingData = await getGithubUserFollowing(username);
   const commitsData = await getGithubUserCommits(username, reposData);
   const pullRequestsData = await getGithubUserPullRequests(username);
+  const eventsData = await getGithubUserEvents(username);
 
   return {
     followers: followersData.length,
@@ -123,6 +140,7 @@ const getGithubUserAllData = async (username: string): Promise<GithubGetAllDataR
     contributions: commitsData.length,
     commits: commitsData.length,
     pullRequests: pullRequestsData.data,
+    events: eventsData,
   };
 };
 
@@ -135,4 +153,5 @@ export default {
   getGithubUserAllData,
   getGithubUserCommits,
   getGithubUserFavLanguage,
+  getGithubUserEvents,
 };

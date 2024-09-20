@@ -6,6 +6,10 @@ import usernameService from '@services/username.service';
 import { UsernameDTO } from '@Itypes/username.interface';
 import { asyncFn, resFn } from '@utils/utils';
 import { NextFunction, Request, Response } from 'express';
+import eventsService from '@services/events.service';
+import { GithubEvent } from '@models/github-events.model';
+import { Repo } from '@models/repos.model';
+import reposService from '@services/repos.service';
 
 const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFunction) => {
   const { username } = req.body;
@@ -152,13 +156,14 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
   const pullRequests = await githubService.getGithubUserPullRequests(username.username);
   const userData = await githubService.getGithubUserInformation(username.username);
   const favLanguage = await githubService.getGithubUserFavLanguage(reposData);
+  const events = await githubService.getGithubUserEvents(username.username);
   const score = await scoreService.calculateScore({
     reposData,
     commits,
     pullRequests,
   });
-  const ai_description = await aiService.generateAiDescription(username);
-  const ai_nickname = await aiService.generateAiNickname(username);
+  const ai_description = username.ai_description ? username.ai_description : await aiService.generateAiDescription(username);
+  const ai_nickname = username.ai_nickname ? username.ai_nickname : await aiService.generateAiNickname(username);
   const updatedUsername = await usernameService.updateUsername({
     username: username.username,
     score,
@@ -178,6 +183,43 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
     extra_score: 0,
     email: userData.email || '',
   });
+
+  const reposToSave = reposData.map((repo) => {
+    const newRepo = new Repo();
+    newRepo.username_id = updatedUsername.id;
+    newRepo.name = repo.name;
+    newRepo.description = repo.description || '';
+    newRepo.github_url = repo.url;
+    newRepo.stars = repo.stargazers_count || 0;
+    newRepo.forks = repo.forks_count || 0;
+    newRepo.issues = repo.open_issues_count || 0;
+    newRepo.pull_requests = 0;
+    newRepo.github_id = repo.id;
+    newRepo.commits = 0;
+    newRepo.comments = 0;
+    newRepo.created_at = new Date();
+    return newRepo;
+  });
+  await reposService.createMultipleRepos(reposToSave);
+
+  const eventsToSave = events.map((event) => {
+    let message = '';
+    if (event.type === 'PushEvent') {
+      message = event.payload.commits[0]?.message || '';
+    }
+    const newEvent = new GithubEvent();
+    newEvent.username_id = updatedUsername.id;
+    newEvent.github_repo_id = event.repo.id;
+    newEvent.event_type = event.type;
+    newEvent.event_size = event?.payload?.size || 0;
+    newEvent.github_id = event.id;
+    newEvent.message = message;
+    newEvent.event_date = new Date(); // Get the current date
+    newEvent.created_at = new Date();
+    return newEvent;
+  });
+  await eventsService.createMultipleEvents(eventsToSave);
+
   resFn(res, {
     status: 200,
     message: 'Username updated successfully',

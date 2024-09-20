@@ -1,5 +1,13 @@
 # Changelog
 
+## 20/9/2024
+
+- Refresh user now is saving the events and the repos for each user
+- Fixes bugs on cron job to not run on already save users
+- Fixed problem with circular dependency
+- Made cron job to only work on production
+- Created tests for events and repo services
+
 ## 19/9/2024
 
 - Updated the husky pre-commit hook to run tests before committing

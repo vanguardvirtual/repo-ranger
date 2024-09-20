@@ -17,6 +17,9 @@ export class Repo extends BaseEntity {
   @Column({ type: 'varchar' })
   github_url!: string;
 
+  @Column({ type: 'int', nullable: true, unique: true })
+  github_id!: number;
+
   @Column({ type: 'int', default: 0 })
   stars!: number;
 
@@ -34,4 +37,7 @@ export class Repo extends BaseEntity {
 
   @Column({ type: 'int', default: 0 })
   comments!: number;
+
+  @Column({ type: 'datetime' })
+  created_at!: Date;
 }

@@ -286,4 +286,5 @@ export interface GithubGetAllDataResponse {
   contributions: number;
   commits: number;
   pullRequests: number;
+  events: any;
 }

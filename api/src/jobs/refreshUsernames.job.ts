@@ -1,6 +1,7 @@
 import AppDataSource from '../db/database';
 import { JobState } from '@models/job.model';
 import aiService from '@services/ai.service';
+import eventsService from '@services/events.service';
 import githubService from '@services/github.service';
 import scoreService from '@services/score.service';
 import usernameService from '@services/username.service';
@@ -46,7 +47,11 @@ const refreshUsernames = async (job: Job) => {
   }
 
   // if updated_at is not more than 1 day old, skip
-  if (currentUser.updated_at && new Date(currentUser.updated_at).getTime() > Date.now() - 1000 * 60 * 60 * 24) {
+  const userDate = currentUser.updated_at ? currentUser.updated_at : currentUser.created_at;
+  const oneDayAgo = new Date(Date.now() - 1000 * 60 * 60 * 24);
+  if (userDate && userDate < oneDayAgo) {
+    logger('info', `User ${currentUser.username} updated more than a day ago, processing`);
+  } else {
     logger('info', `User ${currentUser.username} updated within the last day, skipping`);
     if (jobState) {
       jobState.lastProcessedUserId = lastProcessedUserId + 1;
@@ -64,6 +69,7 @@ const refreshUsernames = async (job: Job) => {
     const pullRequests = await githubService.getGithubUserPullRequests(currentUser.username);
     const userData = await githubService.getGithubUserInformation(currentUser.username);
     const favLanguage = await githubService.getGithubUserFavLanguage(reposData);
+    const events = await githubService.getGithubUserEvents(currentUser.username);
     const score = await scoreService.calculateScore({
       reposData,
       commits,
@@ -91,6 +97,20 @@ const refreshUsernames = async (job: Job) => {
       email: userData.email || '',
     });
     await job.save();
+
+    for (const event of events) {
+      const eventDTO = {
+        username_id: updatedUsername.id,
+        github_repo_id: event.repo.id,
+        event_type: event.type,
+        event_size: event.payload.size,
+        github_id: event.id,
+        message: event.payload.commits[0]?.message || '',
+        event_date: new Date(event.created_at),
+      };
+      await eventsService.createEvent(eventDTO);
+    }
+
     logger('info', `User ${updatedUsername.username} updated`);
   } catch (error) {
     logger('error', `Error updating user ${currentUser.username}: ${error}`);
