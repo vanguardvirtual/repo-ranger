@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Username } from '@models/username.model';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Relation } from 'typeorm';
 
 @Entity('github_events')
 export class GithubEvent extends BaseEntity {
@@ -28,4 +29,7 @@ export class GithubEvent extends BaseEntity {
 
   @Column({ type: 'datetime' })
   created_at!: Date;
+
+  @ManyToOne(() => Username, (username) => username.events)
+  username!: Relation<Username>;
 }

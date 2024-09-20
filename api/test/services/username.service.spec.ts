@@ -2,10 +2,12 @@ import usernameService from '@services/username.service';
 import githubService from '@services/github.service';
 import scoreService from '@services/score.service';
 import { Username } from '@models/username.model';
+import { GithubEvent } from '@models/github-events.model';
 
 jest.mock('@models/username.model');
 jest.mock('@services/github.service');
 jest.mock('@services/score.service');
+jest.mock('@models/github-events.model');
 
 describe('Username Service Tests', () => {
   beforeEach(() => {
@@ -284,6 +286,39 @@ describe('Username Service Tests', () => {
 
     const result = await usernameService.get(1);
     expect(result).toEqual(mockUsernameDTO);
+  });
+
+  test('getTrendingUsers should return top 3 users with most events in the last 24 hours', async () => {
+    const mockGithubEventFind = jest.fn().mockResolvedValue([
+      { username_id: 1, event_size: 100 },
+      { username_id: 2, event_size: 90 },
+      { username_id: 3, event_size: 80 },
+    ]);
+    jest.mocked(GithubEvent.find).mockImplementation(mockGithubEventFind);
+
+    const mockUsernameFind = jest.fn().mockResolvedValue([
+      { id: 1, username: 'user1' },
+      { id: 2, username: 'user2' },
+      { id: 3, username: 'user3' },
+    ]);
+    jest.mocked(Username.find).mockImplementation(mockUsernameFind);
+
+    const result = await usernameService.getTrendingUsers();
+
+    expect(mockGithubEventFind).toHaveBeenCalledWith({
+      where: { event_date: expect.any(Object) },
+      order: { event_size: 'DESC' },
+      take: 3,
+    });
+    expect(mockUsernameFind).toHaveBeenCalledWith({
+      where: { id: expect.any(Object) },
+    });
+    expect(result.length).toBe(3);
+    expect(result).toEqual([
+      { id: 1, username: 'user1' },
+      { id: 2, username: 'user2' },
+      { id: 3, username: 'user3' },
+    ]);
   });
 
   // Add more tests for other methods like getTopUsers, getRandomUser, etc.

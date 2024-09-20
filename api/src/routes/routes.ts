@@ -12,6 +12,7 @@ router.get('/search', usernameController.searchUsernamesSortedByScore);
 router.get('/example-tweet', twitterController.sendExampleTweet);
 router.get('/example-update-tweets-performance', twitterController.updateTweetsPerformance);
 router.get('/example-refresh-username/:id', usernameController.refreshUsername);
+router.get('/trending-users', usernameController.getTrendingUsers);
 
 router.get('/chat/messages', messageController.getLatestChatMessages);
 router.get('/chat/messages/:oldestMessageId', messageController.getOlderChatMessages);

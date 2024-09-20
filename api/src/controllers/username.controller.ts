@@ -11,6 +11,17 @@ import { GithubEvent } from '@models/github-events.model';
 import { Repo } from '@models/repos.model';
 import reposService from '@services/repos.service';
 
+const getTrendingUsers = asyncFn(async (_req: Request, res: Response, _next: NextFunction) => {
+  const trendingUsers = await usernameService.getTrendingUsers();
+  resFn(res, {
+    status: 200,
+    message: 'Trending users fetched successfully',
+    data: trendingUsers,
+    error: '',
+    success: true,
+  });
+});
+
 const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFunction) => {
   const { username } = req.body;
   const reposData = await githubService.getGithubUserRepositories(username);
@@ -214,7 +225,7 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
     newEvent.event_size = event?.payload?.size || 0;
     newEvent.github_id = event.id;
     newEvent.message = message;
-    newEvent.event_date = new Date(); // Get the current date
+    newEvent.event_date = new Date(event.created_at);
     newEvent.created_at = new Date();
     return newEvent;
   });
@@ -229,4 +240,12 @@ const refreshUsername = asyncFn(async (req: Request, res: Response, _next: NextF
   });
 });
 
-export default { createUsername, getUsernames, getUsernameById, searchUsernames, searchUsernamesSortedByScore, refreshUsername };
+export default {
+  createUsername,
+  getUsernames,
+  getUsernameById,
+  searchUsernames,
+  searchUsernamesSortedByScore,
+  refreshUsername,
+  getTrendingUsers,
+};

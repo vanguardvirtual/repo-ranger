@@ -2,7 +2,19 @@ import { Username } from '@models/username.model';
 import githubService from '@services/github.service';
 import scoreService from '@services/score.service';
 import { UsernameDTO } from '@Itypes/username.interface';
-import { Like } from 'typeorm';
+import { In, Like, MoreThan } from 'typeorm';
+import { GithubEvent } from '@models/github-events.model';
+
+const getTrendingUsers = async () => {
+  // get top 3 users with most events in the last 24 hours
+  const events = await GithubEvent.find({
+    where: { event_date: MoreThan(new Date(Date.now() - 24 * 60 * 60 * 1000)) },
+    order: { event_size: 'DESC' },
+    take: 3,
+  });
+  const users = await Username.find({ where: { id: In(events.map((event) => event.username_id)) } });
+  return users;
+};
 
 const createUsername = async (data: UsernameDTO) => {
   const username = await Username.findOne({ where: { username: data.username } });
@@ -128,4 +140,5 @@ export default {
   getRandomUser,
   isUserTop10ByScore,
   isUserTop1ByScore,
+  getTrendingUsers,
 };

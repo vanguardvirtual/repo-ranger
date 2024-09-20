@@ -7,6 +7,9 @@
 - Fixed problem with circular dependency
 - Made cron job to only work on production
 - Created tests for events and repo services
+- Create service and controller for trending users (users with most events in the last 24 hours)
+- Created tests for trending users
+- Fixed problem with circular dependency on github-events.model.ts
 
 ## 19/9/2024
 
