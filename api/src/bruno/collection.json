@@ -1,0 +1,159 @@
+{
+  "name": "Repo-Ranger API Docs",
+  "version": "1",
+  "items": [
+    {
+      "type": "http",
+      "name": "Example Tweet",
+      "seq": 5,
+      "request": {
+        "url": "http://localhost:3000/api/example-tweet",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Example Update tweets performance",
+      "seq": 6,
+      "request": {
+        "url": "http://localhost:3000/api/example-update-tweets-performance",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "add username",
+      "seq": 2,
+      "request": {
+        "url": "http://localhost:3000/api/create",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"username\": \"AkisKourouklis\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "get single username",
+      "seq": 4,
+      "request": {
+        "url": "http://localhost:3000/api/single/4",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "get usersnames",
+      "seq": 1,
+      "request": {
+        "url": "http://localhost:3000/api/search?query=akis",
+        "method": "GET",
+        "headers": [],
+        "params": [
+          {
+            "name": "query",
+            "value": "akis",
+            "type": "query",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "refresh",
+      "seq": 3,
+      "request": {
+        "url": "http://localhost:3000/api/refresh/3",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    }
+  ],
+  "environments": [],
+  "brunoConfig": {
+    "version": "1",
+    "name": "Repo-Ranger API Docs",
+    "type": "collection",
+    "ignore": ["node_modules", ".git"]
+  }
+}
