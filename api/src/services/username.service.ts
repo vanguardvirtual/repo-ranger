@@ -4,6 +4,7 @@ import scoreService from '@services/score.service';
 import { UsernameDTO } from '@Itypes/username.interface';
 import { In, Like, MoreThan } from 'typeorm';
 import { GithubEvent } from '@models/github-events.model';
+import emojiService from '@services/emoji.service';
 
 const getTrendingUsers = async () => {
   // get top 3 users with most events in the last 24 hours
@@ -13,7 +14,14 @@ const getTrendingUsers = async () => {
     take: 3,
   });
   const users = await Username.find({ where: { id: In(events.map((event) => event.username_id)) } });
-  return users;
+  const topUsers = await getTopUsers(3);
+  const usersWithEmoji = await Promise.all(
+    users.map(async (user) => ({
+      ...user,
+      emoji: await emojiService.getEmoji(user.score, topUsers),
+    })),
+  );
+  return usersWithEmoji;
 };
 
 const createUsername = async (data: UsernameDTO) => {

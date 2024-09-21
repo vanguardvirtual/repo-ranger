@@ -5,7 +5,7 @@ import { IResponse, IUser } from '../types';
 
 const api = async ({ queryKey }: { queryKey: string[] }): Promise<IResponse<IUser[]>> => {
   const [_key, query] = queryKey;
-  const response = await apiCall.get<IResponse<IUser[]>>(`${endpoints.SEARCH_USERS}?query=${query}`);
+  const response = await apiCall.get<IResponse<IUser[]>>(`${endpoints.SEARCH_USERS}?query=${query}&withTrending=true`);
 
   return response.data;
 };

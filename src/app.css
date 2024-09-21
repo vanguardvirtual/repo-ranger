@@ -10,3 +10,88 @@
 a {
   @apply text-accent underline;
 }
+
+@keyframes flame-3 {
+  0% {
+    background-position: 0% 80%;
+  }
+  50% {
+    background-position: 100% 80%;
+  }
+  100% {
+    background-position: 0% 80%;
+  }
+}
+
+@keyframes flame-2 {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes flame {
+  0% {
+    background-position: 0% 20%;
+  }
+  50% {
+    background-position: 100% 20%;
+  }
+  100% {
+    background-position: 0% 20%;
+  }
+}
+
+.flame-row {
+  @apply relative;
+}
+
+.flame-row:nth-child(1) {
+  transition: all 0.3s ease;
+  background: linear-gradient(45deg, #ff00008b, #ff8c0093, #ffff008e);
+  background-size: 200% 200%;
+  animation: flame 7s ease-in-out infinite;
+  box-shadow:
+    0 0 10px #ff4400d4,
+    0 0 20px #ff4400c2,
+    0 0 30px #ff4400d4;
+}
+
+.flame-row td::before {
+  content: '🔥';
+  @apply text-2xl;
+  @apply absolute;
+  @apply top-3;
+  @apply left-3;
+}
+
+.flame-row:nth-child(2) {
+  transition: all 0.3s ease;
+  background: linear-gradient(45deg, #ff8c0099, #ffff008d, #ff00008a);
+  background-size: 200% 200%;
+  animation: flame-2 8s ease-in-out infinite;
+  box-shadow:
+    0 0 10px #ff8800d4,
+    0 0 20px #ff8800c2,
+    0 0 30px #ff8800d4;
+}
+
+.flame-row:nth-child(3) {
+  transition: all 0.3s ease;
+  background: linear-gradient(45deg, #ffff008a, #ff000091, #ff8c0093);
+  background-size: 200% 200%;
+  animation: flame-3 9s ease-in-out infinite;
+  box-shadow:
+    0 0 10px #ffcc00d4,
+    0 0 20px #ffcc00c2,
+    0 0 30px #ffcc00d4;
+}
+
+.flame-row td {
+  color: #fff;
+}

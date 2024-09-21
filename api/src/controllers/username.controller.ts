@@ -112,15 +112,23 @@ const getUsernameById = asyncFn(async (req: Request, res: Response, _next: NextF
 });
 
 const searchUsernames = asyncFn(async (req: Request, res: Response, _next: NextFunction) => {
-  const { query } = req.query;
+  const { query, withTrending } = req.query;
   const usernames = await usernameService.searchUsernames(query as string);
   const topUsers = await usernameService.getTopUsers(10);
-  const usernamesWithEmoji = await Promise.all(
+  let usernamesWithEmoji = await Promise.all(
     usernames.map(async (username) => ({
       ...username,
       emoji: await emojiService.getEmoji(username.score, topUsers),
     })),
   );
+
+  if (withTrending === 'true') {
+    const trendingUsers = await usernameService.getTrendingUsers();
+    const trendingUsersSet = new Set(trendingUsers.map((user) => user.id));
+    const uniqueUsers = usernamesWithEmoji.filter((user) => !trendingUsersSet.has(user.id));
+    // Prepend trending users to the usernamesWithEmoji array
+    usernamesWithEmoji = [...trendingUsers, ...uniqueUsers];
+  }
 
   resFn(res, {
     status: 200,
@@ -132,15 +140,24 @@ const searchUsernames = asyncFn(async (req: Request, res: Response, _next: NextF
 });
 
 const searchUsernamesSortedByScore = asyncFn(async (req: Request, res: Response, _next: NextFunction) => {
-  const { query } = req.query;
+  const { query, withTrending } = req.query;
   const usernames = await usernameService.searchUsernamesSortedByScore(query as string);
   const topUsers = await usernameService.getTopUsers(10);
-  const usernamesWithEmoji = await Promise.all(
+  let usernamesWithEmoji = await Promise.all(
     usernames.map(async (username) => ({
       ...username,
       emoji: await emojiService.getEmoji(username.score, topUsers),
     })),
   );
+
+  if (withTrending === 'true') {
+    const trendingUsers = await usernameService.getTrendingUsers();
+    const trendingUsersSet = new Set(trendingUsers.map((user) => user.id));
+    const uniqueUsers = usernamesWithEmoji.filter((user) => !trendingUsersSet.has(user.id));
+    // Prepend trending users to the usernamesWithEmoji array
+    usernamesWithEmoji = [...trendingUsers, ...uniqueUsers];
+  }
+
   resFn(res, {
     status: 200,
     message: 'Usernames fetched successfully',

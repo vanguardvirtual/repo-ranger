@@ -47,6 +47,7 @@ const Header = () => {
       <p>
         🐛 Issues: <b className="underline">+1</b> point for each issue
       </p>
+      <p className="mb-2 mt-2">Trending Users 🔥 have the most actions in the last 24 hours</p>
     </>
   );
 };

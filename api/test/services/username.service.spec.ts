@@ -3,11 +3,13 @@ import githubService from '@services/github.service';
 import scoreService from '@services/score.service';
 import { Username } from '@models/username.model';
 import { GithubEvent } from '@models/github-events.model';
+import emojiService from '@services/emoji.service';
 
 jest.mock('@models/username.model');
 jest.mock('@services/github.service');
 jest.mock('@services/score.service');
 jest.mock('@models/github-events.model');
+jest.mock('@services/emoji.service');
 
 describe('Username Service Tests', () => {
   beforeEach(() => {
@@ -303,6 +305,8 @@ describe('Username Service Tests', () => {
     ]);
     jest.mocked(Username.find).mockImplementation(mockUsernameFind);
 
+    jest.mocked(emojiService.getEmoji).mockReturnValue('💩');
+
     const result = await usernameService.getTrendingUsers();
 
     expect(mockGithubEventFind).toHaveBeenCalledWith({
@@ -315,9 +319,9 @@ describe('Username Service Tests', () => {
     });
     expect(result.length).toBe(3);
     expect(result).toEqual([
-      { id: 1, username: 'user1' },
-      { id: 2, username: 'user2' },
-      { id: 3, username: 'user3' },
+      { id: 1, username: 'user1', emoji: '💩' },
+      { id: 2, username: 'user2', emoji: '💩' },
+      { id: 3, username: 'user3', emoji: '💩' },
     ]);
   });
 

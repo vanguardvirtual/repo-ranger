@@ -28,11 +28,13 @@ const UserRow = ({ user, index, setSelectedUser, hasUserBeenCreated, createdUser
     }
   }, [hasUserBeenCreated, createdUser, user.id]);
 
-  const rowClassName = `transition-colors duration-300 ${isFlashing ? 'bg-green-200' : ''}`;
+  const isTrending = index < 3;
+  const rowClassName = `transition-colors duration-300 hover:translate-y-[-2px] transition-transform duration-300 
+  ${isTrending ? 'flame-row' : ''} ${isFlashing ? 'bg-green-200' : ''}`;
 
   return (
     <tr ref={rowRef} className={rowClassName} key={user.username}>
-      <td className="border border-gray-300 p-2">{index + 1}</td>
+      <td className="border border-gray-300 p-2 text-center">{index + 1}</td>
       <td className="border border-gray-300 p-2 flex items-center justify-center">
         <div className="avatar">
           <div className="w-10 rounded-full">

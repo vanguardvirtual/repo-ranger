@@ -5,11 +5,12 @@ meta {
 }
 
 get {
-  url: {{API_URL}}/api/search?query=akis
+  url: {{API_URL}}/api/search?query=&withTrending=true
   body: none
   auth: none
 }
 
 params:query {
-  query: akis
+  query: 
+  withTrending: true
 }

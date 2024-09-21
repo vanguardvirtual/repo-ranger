@@ -5,6 +5,10 @@
 - Added Bruno API documentation
 - Fixed problem with repos not saving the created_at field
 - Username service now is saving the created_at field
+- Added trending users on the frontend with animations
+- Included trending users on the search results
+- Added bruno trending endpoint
+- Updated username tests to include emoji service
 
 ## 20/9/2024
 
