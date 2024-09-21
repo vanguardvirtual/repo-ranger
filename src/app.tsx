@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Homepage from '@pages/Homepage';
 import ErrorBoundary from '@components/HOC/ErrorBoundary';
+import Errorpage from '@pages/Errorpage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,14 +22,16 @@ export function App() {
       path: '/',
       element: <Homepage />,
     },
+    {
+      path: '*',
+      element: <Errorpage />,
+    },
   ]);
 
   return (
     <>
       <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>{<RouterProvider router={router} />}</QueryClientProvider>
       </ErrorBoundary>
     </>
   );
