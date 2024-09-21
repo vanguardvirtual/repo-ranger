@@ -1,0 +1,6 @@
+{
+  "version": "1",
+  "name": "Repo-Ranger API Docs",
+  "type": "collection",
+  "ignore": ["node_modules", ".git"]
+}
