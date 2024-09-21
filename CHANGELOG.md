@@ -1,5 +1,9 @@
 # Changelog
 
+## 21/9/2024
+
+- Added Bruno API documentation
+
 ## 20/9/2024
 
 - Refresh user now is saving the events and the repos for each user
