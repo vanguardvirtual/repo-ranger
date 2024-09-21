@@ -38,6 +38,6 @@ export class Repo extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   comments!: number;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   created_at!: Date;
 }

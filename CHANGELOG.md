@@ -3,6 +3,8 @@
 ## 21/9/2024
 
 - Added Bruno API documentation
+- Fixed problem with repos not saving the created_at field
+- Username service now is saving the created_at field
 
 ## 20/9/2024
 

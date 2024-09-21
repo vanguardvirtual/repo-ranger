@@ -40,6 +40,7 @@ const createUsername = async (data: UsernameDTO) => {
   newUsername.ai_description = data.ai_description || '';
   newUsername.ai_nickname = data.ai_nickname || '';
   newUsername.ai_description_updated_at = data.ai_description_updated_at || new Date();
+  newUsername.created_at = new Date();
 
   const savedUsername = await newUsername.save();
 
