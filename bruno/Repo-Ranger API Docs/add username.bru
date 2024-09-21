@@ -1,0 +1,17 @@
+meta {
+  name: add username
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{API_URL}}/api/create
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "username": "AkisKourouklis"
+  }
+}
