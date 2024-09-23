@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { IUser } from '../../types';
+import { formatNumber } from '../../util/NumberFormater';
 
 interface UserRowProps {
   user: IUser;
@@ -45,7 +46,7 @@ const UserRow = ({ user, index, setSelectedUser, hasUserBeenCreated, createdUser
       <td className="border border-gray-300 p-2">{user.username}</td>
       <td className="border border-gray-300 p-2">{user.fav_language}</td>
       <td className="border border-gray-300 p-2">{user.location}</td>
-      <td className="border border-gray-300 p-2">{user.score}</td>
+      <td className="border border-gray-300 p-2">{formatNumber(user.score)}</td>
       <td className="border border-gray-300 p-2">{user.emoji}</td>
       <td className="border border-gray-300 p-2 h-full">
         <div className="flex gap-2 items-center h-full">
