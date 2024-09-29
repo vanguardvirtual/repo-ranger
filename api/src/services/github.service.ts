@@ -90,7 +90,12 @@ const getGithubUserCommits = async (username: string, repos: GithubRepo[]): Prom
 
 const getGithubUserPullRequests = async (username: string) => {
   try {
-    const response = await axios.get(`https://api.github.com/search/issues?q=author:${username}+is:pr`);
+    const response = await axios.get(`https://api.github.com/search/issues?q=author:${username}+is:pr`, {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
     return response.data.items;
   } catch (error) {
     logger('error', JSON.stringify(error));

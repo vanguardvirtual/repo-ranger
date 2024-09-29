@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Relation } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Relation, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Username } from './username.model';
 
 @Entity('repos')
@@ -12,7 +12,7 @@ export class Repo extends BaseEntity {
   @Column({ type: 'varchar' })
   name!: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'text' })
   description!: string;
 
   @Column({ type: 'varchar' })
@@ -39,9 +39,12 @@ export class Repo extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   comments!: number;
 
-  @Column({ type: 'datetime', nullable: true })
-  created_at!: Date;
-
   @ManyToOne(() => Username, (username: Username) => username.repos)
   username!: Relation<Username>;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
+  created_at!: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
+  updated_at!: Date;
 }

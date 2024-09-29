@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity, Index, OneToMany, Relation, BeforeInsert } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  BaseEntity,
+  Index,
+  OneToMany,
+  Relation,
+  UpdateDateColumn,
+} from 'typeorm';
 import { TwitterPost } from './twitter-posts.model';
 import { GithubEvent } from '@models/github-events.model';
 import { Repo } from './repos.model';
@@ -63,12 +73,6 @@ export class Username extends BaseEntity {
   @OneToMany(() => TwitterPost, (twitter_post: TwitterPost) => twitter_post.username)
   twitter_posts!: Relation<TwitterPost[]>;
 
-  @CreateDateColumn({ type: 'datetime', nullable: true })
-  created_at!: Date;
-
-  @Column({ type: 'datetime', nullable: true })
-  updated_at!: Date;
-
   total_score(): number {
     return this.score + this.extra_score;
   }
@@ -79,9 +83,9 @@ export class Username extends BaseEntity {
   @OneToMany(() => Repo, (repo: Repo) => repo.username)
   repos!: Relation<Repo[]>;
 
-  @BeforeInsert()
-  updateDates() {
-    this.created_at = new Date();
-    this.updated_at = new Date();
-  }
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
+  created_at!: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
+  updated_at!: Date;
 }

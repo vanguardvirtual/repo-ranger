@@ -60,4 +60,17 @@ const updateRepo = async (repo: Repo) => {
   return updatedRepo;
 };
 
-export default { getReposByUsername, getAllRepos, createRepo, updateRepo, createMultipleRepos, getReposByUsernameId };
+const getGithubRepoByGithubId = async (githubId: number) => {
+  const repo = await Repo.findOne({ where: { github_id: githubId } });
+  return repo;
+};
+
+export default {
+  getReposByUsername,
+  getAllRepos,
+  createRepo,
+  updateRepo,
+  createMultipleRepos,
+  getReposByUsernameId,
+  getGithubRepoByGithubId,
+};

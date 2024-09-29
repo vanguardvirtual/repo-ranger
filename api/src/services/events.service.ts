@@ -59,4 +59,9 @@ const getTodayEvents = async () => {
   return events;
 };
 
-export default { createEvent, getEventsByUsername, getEventsByRepo, getTodayEvents, createMultipleEvents };
+const getEventByGithubId = async (github_id: string) => {
+  const event = await GithubEvent.findOne({ where: { github_id } });
+  return event;
+};
+
+export default { createEvent, getEventsByUsername, getEventsByRepo, getTodayEvents, createMultipleEvents, getEventByGithubId };

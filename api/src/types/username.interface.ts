@@ -16,4 +16,6 @@ export interface UsernameDTO {
   ai_description_updated_at?: Date;
   score: number;
   extra_score: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

@@ -6,6 +6,7 @@
 - Fixed cron job error on id reset above 10
 - Updated User Details to fetch data diretly from the API
 - Added default value on created_at on username
+- Fixed Broken Cron Job and fixed broken timestamps
 
 ## 21/9/2024
 
