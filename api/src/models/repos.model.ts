@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, Relation } from 'typeorm';
+import { Username } from './username.model';
 
 @Entity('repos')
 export class Repo extends BaseEntity {
@@ -40,4 +41,7 @@ export class Repo extends BaseEntity {
 
   @Column({ type: 'datetime', nullable: true })
   created_at!: Date;
+
+  @ManyToOne(() => Username, (username: Username) => username.repos)
+  username!: Relation<Username>;
 }

@@ -118,7 +118,9 @@ const getTopUsers = async (limit: number) => {
 };
 
 const get = async (id: number) => {
-  const user = await Username.findOne({ where: { id } });
+  const user = await Username.findOne({
+    where: { id },
+  });
   return user;
 };
 

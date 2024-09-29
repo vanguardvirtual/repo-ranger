@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity, Index, OneToMany, Relation } from 'typeorm';
 import { TwitterPost } from './twitter-posts.model';
 import { GithubEvent } from '@models/github-events.model';
+import { Repo } from './repos.model';
 
 @Entity('usernames')
 @Index(['score'])
@@ -74,4 +75,7 @@ export class Username extends BaseEntity {
 
   @OneToMany(() => GithubEvent, (github_event: GithubEvent) => github_event.username)
   events!: Relation<GithubEvent[]>;
+
+  @OneToMany(() => Repo, (repo: Repo) => repo.username)
+  repos!: Relation<Repo[]>;
 }

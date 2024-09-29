@@ -1,15 +1,40 @@
 export interface IUser {
   id: number;
   username: string;
-  score: number;
   location: string;
   fav_language: string;
   contributions: number;
   avatar: string;
   bio: string;
+  email: string;
   name: string;
-  emoji: string;
-  ai_description: string;
+  ai_description?: string;
+  ai_nickname?: string;
+  followers: number;
+  following: number;
+  github_url?: string;
+  twitter_username?: string;
+  ai_description_updated_at?: Date;
+  score: number;
+  extra_score: number;
+  repos: IRepo[];
+}
+
+export interface IRepo {
+  id: number;
+  username_id: number;
+  name: string;
+  description: string;
+  github_url: string;
+  github_id?: number;
+  stars: number;
+  forks: number;
+  issues: number;
+  pull_requests: number;
+  commits: number;
+  comments: number;
+  created_at?: Date;
+  username: IUser;
 }
 
 export interface GitHubUser {

@@ -1,7 +1,7 @@
-import useGetGitHubUserData from '@api/getUserGitData';
 import { IoMdClose } from 'react-icons/io';
 import { IUser } from '../../types';
 import { useEffect } from 'preact/hooks';
+import useGetSingleUser from '@api/getSingleUser';
 
 interface DetailsProps {
   user: IUser;
@@ -9,7 +9,7 @@ interface DetailsProps {
 }
 
 const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
-  const { data, isLoading, error } = useGetGitHubUserData(user.username);
+  const { data, isLoading, error } = useGetSingleUser({ id: `${user.id}` });
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -32,89 +32,50 @@ const Details: React.FC<DetailsProps> = ({ user, onClose }) => {
           <>
             <div className="flex gap-2 items-center mb-4">
               <h2 className="text-2xl font-bold">User Details</h2>
-              <a href={data.user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline">
+              <a href={data.data.github_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline">
                 View on GitHub
               </a>
             </div>
 
             <div className="mb-4 flex items-center">
-              <img src={data.user.avatar_url} alt={`${data.user.name}'s avatar`} className="w-20 h-20 rounded-full mr-4" />
+              <img src={data.data.avatar} alt={`${data.data.name}'s avatar`} className="w-20 h-20 rounded-full mr-4" />
               <div>
-                <h3 className="text-xl font-semibold">{data.user.name}</h3>
-                <p className="text-gray-600">@{data.user.login}</p>
+                <h3 className="text-xl font-semibold">{data.data.name}</h3>
+                <p className="text-gray-600">@{data.data.username}</p>
               </div>
             </div>
 
             <div className="mb-4">
               <p className="mb-4 text-secondary">{user.ai_description}</p>
               <p>
-                <strong>Bio:</strong> {data.user.bio || 'N/A'}
+                <strong>Bio:</strong> {data.data.bio || 'N/A'}
               </p>
               <p>
-                <strong>Location:</strong> {data.user.location || 'N/A'}
+                <strong>Location:</strong> {data.data.location || 'N/A'}
               </p>
               <p>
-                <strong>Blog:</strong>{' '}
-                {data.user.blog ? (
-                  <a
-                    href={
-                      data.user.blog.startsWith('http://') || data.user.blog.startsWith('https://')
-                        ? data.user.blog
-                        : `https://${data.user.blog}`
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {data.user.blog}
-                  </a>
-                ) : (
-                  'N/A'
-                )}
-              </p>
-              <p>
-                <strong>Twitter:</strong> {data.user.twitter_username ? `@${data.user.twitter_username}` : 'N/A'}
+                <strong>Twitter:</strong> {data.data.twitter_username ? `@${data.data.twitter_username}` : 'N/A'}
               </p>
             </div>
 
             <div className="mb-4 grid grid-cols-2 gap-2">
               <p>
-                <strong>Followers:</strong> {data.followers.length}
+                <strong>Followers:</strong> {data.data.followers}
               </p>
               <p>
-                <strong>Following:</strong> {data.following.length}
+                <strong>Following:</strong> {data.data.following}
               </p>
               <p>
-                <strong>Public Repos:</strong> {data.repos.length}
+                <strong>Public Repos:</strong> {data.data.repos.length}
               </p>
-              <p>
-                <strong>Public Gists:</strong> {data.gists.length}
-              </p>
-              <p>
-                <strong>Starred Repos:</strong> {data.starred.length}
-              </p>
-            </div>
-
-            <div className="mb-4">
-              <h4 className="font-semibold">Recent Followers</h4>
-              <div className="flex flex-wrap">
-                {data.followers.slice(0, 5).map((follower) => (
-                  <img
-                    key={follower.login}
-                    src={follower.avatar_url}
-                    alt={follower.login}
-                    className="w-10 h-10 rounded-full mr-2 mb-2"
-                    title={follower.login}
-                  />
-                ))}
-              </div>
             </div>
 
             <div className="mb-4">
               <h4 className="font-semibold">Recent Repositories</h4>
               <ul className="list-disc list-inside">
-                {data.repos.slice(0, 5).map((repo) => (
+                {data.data.repos.slice(0, 5).map((repo) => (
                   <li key={repo.name}>
-                    <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    <a href={repo.github_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                       {repo.name}
                     </a>
                     {repo.description && <span className="text-sm text-gray-600"> - {repo.description}</span>}

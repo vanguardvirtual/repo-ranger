@@ -12,6 +12,11 @@ const getReposByUsername = async (username: string) => {
   return repos;
 };
 
+const getReposByUsernameId = async (usernameId: number) => {
+  const repos = await Repo.find({ where: { username_id: usernameId } });
+  return repos;
+};
+
 const getAllRepos = async () => {
   const repos = await Repo.find();
   return repos;
@@ -55,4 +60,4 @@ const updateRepo = async (repo: Repo) => {
   return updatedRepo;
 };
 
-export default { getReposByUsername, getAllRepos, createRepo, updateRepo, createMultipleRepos };
+export default { getReposByUsername, getAllRepos, createRepo, updateRepo, createMultipleRepos, getReposByUsernameId };

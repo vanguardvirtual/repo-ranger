@@ -97,10 +97,12 @@ const getUsernameById = asyncFn(async (req: Request, res: Response, _next: NextF
       success: false,
     });
   }
+  const repos = await reposService.getReposByUsernameId(username.id);
   const topUsers = await usernameService.getTopUsers(10);
   const usernameWithEmoji = {
     ...username,
-    emoji: await emojiService.getEmoji(username.score, topUsers),
+    emoji: emojiService.getEmoji(username.score, topUsers),
+    repos: repos,
   };
   resFn(res, {
     status: 200,
