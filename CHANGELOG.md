@@ -8,6 +8,7 @@
 - Added default value on created_at on username
 - Fixed Broken Cron Job and fixed broken timestamps
 - Fixed error not creating username passing wrong argument in user contr
+- On create user save repos as well
 
 ## 21/9/2024
 

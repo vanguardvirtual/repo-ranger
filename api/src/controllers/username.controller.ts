@@ -53,14 +53,31 @@ const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFu
     extra_score: 0,
   };
   const savedUsername = await usernameService.createUsername(usernameData);
-
   const ai_description = await aiService.generateAiDescription(savedUsername);
   const ai_nickname = await aiService.generateAiNickname(savedUsername, ai_description);
 
   savedUsername.ai_description = ai_description;
   savedUsername.ai_nickname = ai_nickname;
-
   await savedUsername.save();
+
+  // save repos
+  const reposToSave = reposData.map((repo) => {
+    const newRepo = new Repo();
+    newRepo.username_id = savedUsername.id;
+    newRepo.name = repo.name;
+    newRepo.description = repo.description || '';
+    newRepo.github_url = repo.url;
+    newRepo.stars = repo.stargazers_count || 0;
+    newRepo.forks = repo.forks_count || 0;
+    newRepo.issues = repo.open_issues_count || 0;
+    newRepo.pull_requests = 0;
+    newRepo.github_id = repo.id;
+    newRepo.commits = 0;
+    newRepo.comments = 0;
+    newRepo.created_at = new Date();
+    return newRepo;
+  });
+  await reposService.createMultipleRepos(reposToSave);
 
   resFn(res, {
     status: 200,
