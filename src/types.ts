@@ -8,13 +8,13 @@ export interface IUser {
   bio: string;
   email: string;
   name: string;
-  ai_description?: string;
+  ai_description: string;
   ai_nickname?: string;
   followers: number;
   following: number;
   github_url?: string;
   twitter_username?: string;
-  ai_description_updated_at?: Date;
+  ai_description_updated_at: Date;
   score: number;
   extra_score: number;
   repos: IRepo[];
