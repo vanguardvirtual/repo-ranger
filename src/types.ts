@@ -18,6 +18,7 @@ export interface IUser {
   score: number;
   extra_score: number;
   repos: IRepo[];
+  emoji: string;
 }
 
 export interface IRepo {
