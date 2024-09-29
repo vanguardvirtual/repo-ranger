@@ -34,8 +34,6 @@ const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFu
     commits,
     pullRequests,
   });
-  const ai_description = await aiService.generateAiDescription(username);
-  const ai_nickname = await aiService.generateAiNickname(username);
 
   const usernameData: UsernameDTO = {
     username,
@@ -46,8 +44,6 @@ const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFu
     bio: userData.bio || '',
     email: userData.email || '',
     name: userData.name,
-    ai_description,
-    ai_nickname,
     followers: userData.followers || 0,
     following: userData.following || 0,
     github_url: userData.html_url,
@@ -57,6 +53,14 @@ const createUsername = asyncFn(async (req: Request, res: Response, _next: NextFu
     extra_score: 0,
   };
   const savedUsername = await usernameService.createUsername(usernameData);
+
+  const ai_description = await aiService.generateAiDescription(savedUsername);
+  const ai_nickname = await aiService.generateAiNickname(savedUsername, ai_description);
+
+  savedUsername.ai_description = ai_description;
+  savedUsername.ai_nickname = ai_nickname;
+
+  await savedUsername.save();
 
   resFn(res, {
     status: 200,

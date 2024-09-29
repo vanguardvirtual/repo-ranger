@@ -7,6 +7,7 @@
 - Updated User Details to fetch data diretly from the API
 - Added default value on created_at on username
 - Fixed Broken Cron Job and fixed broken timestamps
+- Fixed error not creating username passing wrong argument in user contr
 
 ## 21/9/2024
 

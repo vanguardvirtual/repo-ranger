@@ -46,12 +46,12 @@ const generateAiDescription = async (user: Username): Promise<string> => {
     : "That user has such a bad profile that we couldn't generate a description for them. 💩";
 };
 
-const generateAiNickname = async (user: Username): Promise<string> => {
+const generateAiNickname = async (user: Username, aiDescription?: string): Promise<string> => {
   if (user.ai_nickname) {
     return user.ai_nickname;
   }
 
-  const ai_description = user.ai_description;
+  const ai_description = user.ai_description ? user.ai_description : aiDescription ? aiDescription : '';
   const username = user.name;
   const handle = user.username;
 
@@ -76,7 +76,6 @@ const generateAiNickname = async (user: Username): Promise<string> => {
   const nickname = msg?.content[0] && 'text' in msg.content[0] ? msg.content[0].text : '';
 
   user.ai_nickname = nickname;
-  user.save();
 
   return nickname;
 };
