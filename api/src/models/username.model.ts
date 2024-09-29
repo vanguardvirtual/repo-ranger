@@ -63,7 +63,7 @@ export class Username extends BaseEntity {
   @OneToMany(() => TwitterPost, (twitter_post: TwitterPost) => twitter_post.username)
   twitter_posts!: Relation<TwitterPost[]>;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   created_at!: Date;
 
   @Column({ type: 'datetime', nullable: true })

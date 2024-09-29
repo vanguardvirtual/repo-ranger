@@ -5,6 +5,7 @@
 - Created new get last id function on username service
 - Fixed cron job error on id reset above 10
 - Updated User Details to fetch data diretly from the API
+- Added default value on created_at on username
 
 ## 21/9/2024
 
