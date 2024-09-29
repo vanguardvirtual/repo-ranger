@@ -10,6 +10,7 @@ import { Job } from 'agenda';
 
 const refreshUsernames = async (job: Job) => {
   const jobStateRepository = AppDataSource.getRepository(JobState);
+  const lastUserId = usernameService.getLastUserId();
   let lastProcessedUserId = job.attrs.data?.lastProcessedUserId;
   let jobState: JobState | null = null;
 
@@ -33,7 +34,7 @@ const refreshUsernames = async (job: Job) => {
     logger('info', `No user in the database with ID ${lastProcessedUserId}`);
 
     // Reset lastProcessedUserId to 0 if it exceeds 10
-    if (lastProcessedUserId > 10) {
+    if (lastProcessedUserId > lastUserId) {
       lastProcessedUserId = 0;
       logger('info', 'Resetting last processed user ID to 0');
     }

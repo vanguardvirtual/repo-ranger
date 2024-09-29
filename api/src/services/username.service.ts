@@ -139,6 +139,11 @@ const isUserTop1ByScore = async (score: number) => {
   return users.some((user) => user.score === score);
 };
 
+const getLastUserId = async () => {
+  const user = await Username.createQueryBuilder('user').select().orderBy('id', 'DESC').getOne();
+  return user?.id;
+};
+
 export default {
   createUsername,
   updateUsername,
@@ -152,4 +157,5 @@ export default {
   isUserTop10ByScore,
   isUserTop1ByScore,
   getTrendingUsers,
+  getLastUserId,
 };
