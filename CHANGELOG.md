@@ -1,5 +1,11 @@
 # Changelog
 
+## 29/9/2024
+
+- Created new get last id function on username service
+- Fixed cron job error on id reset above 10
+- Updated User Details to fetch data diretly from the API
+
 ## 21/9/2024
 
 - Added Bruno API documentation
