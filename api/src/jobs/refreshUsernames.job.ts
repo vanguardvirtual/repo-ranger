@@ -1,6 +1,8 @@
+import { GithubRepo, GithubUser, GithubUserCommits } from '@Itypes/github.interface';
 import AppDataSource from '../db/database';
 import { JobState } from '@models/job.model';
 import { Repo } from '@models/repos.model';
+import { Username } from '@models/username.model';
 import aiService from '@services/ai.service';
 import eventsService from '@services/events.service';
 import githubService from '@services/github.service';
@@ -9,6 +11,7 @@ import scoreService from '@services/score.service';
 import usernameService from '@services/username.service';
 import { logger } from '@utils/utils';
 import { Job } from 'agenda';
+import { GithubEvent } from '@Itypes/events.interface';
 
 const refreshUsernames = async (job: Job) => {
   const jobStateRepository = AppDataSource.getRepository(JobState);
@@ -87,7 +90,7 @@ async function handleNoUserFound(
   }
 }
 
-function shouldSkipUser(user: any) {
+function shouldSkipUser(user: Username) {
   const userDate = user.updated_at ? user.updated_at : user.created_at;
   const oneDayAgo = new Date(Date.now() - 1000 * 60 * 60 * 24);
   if (userDate && userDate > oneDayAgo) {
@@ -97,7 +100,7 @@ function shouldSkipUser(user: any) {
   return false;
 }
 
-async function processUser(user: any, job: Job) {
+async function processUser(user: Username, job: Job) {
   const { reposData, commits, pullRequests, userData, favLanguage, events } = await fetchGithubData(user.username);
   const score = await scoreService.calculateScore({ reposData, commits, pullRequests });
   const aiData = await generateAiData(user);
@@ -113,50 +116,43 @@ async function processUser(user: any, job: Job) {
 async function fetchGithubData(username: string) {
   logger('info', `Fetching ${username} Github data`);
 
-  const retryFunction = async (func: () => Promise<any>, maxRetries = 3) => {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        return await func();
-      } catch (error) {
-        if (attempt === maxRetries) {
-          throw error;
-        }
-        logger('warn', `Attempt ${attempt} failed for ${func.name}. Retrying...`);
-        await new Promise((resolve) => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
-      }
-    }
-  };
-
-  const [reposData, _commits, pullRequests, userData, _favLanguage, events] = await Promise.all([
-    retryFunction(() => githubService.getGithubUserRepositories(username)),
-    retryFunction(() => githubService.getGithubUserCommits(username, [])), // Note: We'll update this after getting reposData
-    retryFunction(() => githubService.getGithubUserPullRequests(username)),
-    retryFunction(() => githubService.getGithubUserInformation(username)),
-    retryFunction(() => githubService.getGithubUserFavLanguage([])), // Note: We'll update this after getting reposData
-    retryFunction(() => githubService.getGithubUserEvents(username)),
+  const [reposData, pullRequests, userData, events] = await Promise.all([
+    githubService.getGithubUserRepositories(username),
+    githubService.getGithubUserPullRequests(username),
+    githubService.getGithubUserInformation(username),
+    githubService.getGithubUserEvents(username),
   ]);
 
-  // Update commits and favLanguage with the correct reposData
-  const updatedCommits = await retryFunction(() => githubService.getGithubUserCommits(username, reposData));
-  const updatedFavLanguage = await retryFunction(() => githubService.getGithubUserFavLanguage(reposData));
+  // Fetch commits and favorite language after getting reposData
+  const commits = await githubService.getGithubUserCommits(username, reposData);
+  const favLanguage = await githubService.getGithubUserFavLanguage(reposData);
 
-  return {
+  const resp: {
+    reposData: GithubRepo[];
+    commits: GithubUserCommits[];
+    pullRequests: any;
+    userData: GithubUser;
+    favLanguage: string;
+    events: GithubEvent[];
+  } = {
     reposData,
-    commits: updatedCommits,
+    commits,
     pullRequests,
     userData,
-    favLanguage: updatedFavLanguage,
+    favLanguage,
     events,
   };
+
+  return resp;
 }
 
-async function generateAiData(user: any) {
+async function generateAiData(user: Username) {
   const ai_description = user.ai_description || (await aiService.generateAiDescription(user));
   const ai_nickname = user.ai_nickname || (await aiService.generateAiNickname(user));
   return { ai_description, ai_nickname };
 }
 
-async function updateUsername(user: any, userData: any, score: number, favLanguage: string, aiData: any) {
+async function updateUsername(user: Username, userData: GithubUser, score: number, favLanguage: string, aiData: any) {
   return await usernameService.updateUsername({
     username: user.username,
     score,
@@ -165,7 +161,7 @@ async function updateUsername(user: any, userData: any, score: number, favLangua
     contributions: 0,
     avatar: userData.avatar_url,
     bio: userData.bio || '',
-    name: userData.name,
+    name: userData.login,
     ai_description: aiData.ai_description,
     ai_nickname: aiData.ai_nickname,
     followers: userData.followers || 0,
@@ -180,7 +176,7 @@ async function updateUsername(user: any, userData: any, score: number, favLangua
   });
 }
 
-async function processEvents(events: any[], updatedUsername: any) {
+async function processEvents(events: GithubEvent[], updatedUsername: Username) {
   for (const event of events) {
     if (!event.payload.commits) continue;
     const eventExists = await eventsService.getEventByGithubId(event.id);
@@ -199,7 +195,7 @@ async function processEvents(events: any[], updatedUsername: any) {
   }
 }
 
-async function saveRepos(reposData: any[], updatedUsername: any) {
+async function saveRepos(reposData: GithubRepo[], updatedUsername: Username) {
   const reposToSave = reposData.map((repo) => {
     const newRepo = new Repo();
     newRepo.username_id = updatedUsername.id;

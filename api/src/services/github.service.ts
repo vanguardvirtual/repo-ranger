@@ -77,6 +77,11 @@ const getGithubUserCommits = async (username: string, repos: GithubRepo[]): Prom
           Accept: 'application/vnd.github.v3+json',
         },
       });
+
+      if (response.status === 409) {
+        return [];
+      }
+
       for (const commit of response.data) {
         commits.push(commit);
       }

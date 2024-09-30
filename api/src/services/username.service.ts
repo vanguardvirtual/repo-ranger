@@ -117,7 +117,7 @@ const getTopUsers = async (limit: number) => {
   return users;
 };
 
-const get = async (id: number) => {
+const get = async (id: number): Promise<Username | null> => {
   const user = await Username.findOne({
     where: { id },
   });
