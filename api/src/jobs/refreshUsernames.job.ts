@@ -1,5 +1,4 @@
 import { GithubRepo, GithubUser, GithubUserCommits } from '@Itypes/github.interface';
-import AppDataSource from '../db/database';
 import { JobState } from '@models/job.model';
 import { Repo } from '@models/repos.model';
 import { Username } from '@models/username.model';
@@ -14,24 +13,23 @@ import { Job } from 'agenda';
 import { GithubEvent } from '@Itypes/events.interface';
 
 const refreshUsernames = async (job: Job) => {
-  const jobStateRepository = AppDataSource.getRepository(JobState);
+  const lastJobId = await getLastUserId();
   const lastUserId = await usernameService.getLastUserId();
-  const { lastProcessedUserId, jobState } = await initializeJobState(job, jobStateRepository);
 
   if (!lastUserId) {
     logger('error', 'No users found in the database');
     return;
   }
 
-  const currentUser = await usernameService.get(lastProcessedUserId);
+  const currentUser = await usernameService.get(lastJobId);
 
   if (!currentUser) {
-    await handleNoUserFound(lastProcessedUserId, lastUserId, jobState, jobStateRepository, job);
+    await handleNoUserFound(lastJobId, lastUserId);
     return;
   }
 
   if (shouldSkipUser(currentUser)) {
-    await updateJobState(jobState, jobStateRepository, job, lastProcessedUserId + 1);
+    await updateJobState();
     return;
   }
 
@@ -43,50 +41,17 @@ const refreshUsernames = async (job: Job) => {
     logger('error', `Error updating user ${currentUser.username}: ${err}`);
   }
 
-  await updateJobState(jobState, jobStateRepository, job, lastProcessedUserId + 1);
+  await updateJobState();
 };
 
-async function initializeJobState(job: Job, jobStateRepository: any) {
-  let lastProcessedUserId = job.attrs.data?.lastProcessedUserId;
-  let jobState: JobState | null = null;
+async function handleNoUserFound(lastJobId: number, lastUserId: number) {
+  logger('info', `No user in the database with ID ${lastJobId}`);
 
-  if (!lastProcessedUserId) {
-    logger('info', 'No last processed user ID found, initializing job state');
-    jobState = await jobStateRepository.findOne({ where: { jobName: 'refreshUsernames' } });
-    lastProcessedUserId = jobState?.lastProcessedUserId || 0;
-    if (!jobState) {
-      jobState = await createNewJobState(jobStateRepository);
-      lastProcessedUserId = 1;
-    }
-  }
-
-  return { lastProcessedUserId, jobState };
-}
-
-async function createNewJobState(jobStateRepository: any) {
-  logger('info', 'No job state found, creating new job state');
-  const newJobState = new JobState();
-  newJobState.jobName = 'refreshUsernames';
-  newJobState.lastProcessedUserId = 1;
-  await jobStateRepository.save(newJobState);
-  return newJobState;
-}
-
-async function handleNoUserFound(
-  lastProcessedUserId: number,
-  lastUserId: number,
-  jobState: JobState | null,
-  jobStateRepository: any,
-  job: Job,
-) {
-  logger('info', `No user in the database with ID ${lastProcessedUserId}`);
-
-  if (lastProcessedUserId > lastUserId) {
-    lastProcessedUserId = 0;
+  if (lastJobId > lastUserId) {
     logger('info', 'Resetting last processed user ID to 0');
-    await updateJobState(jobState, jobStateRepository, job, 0);
+    await resetJobState();
   } else {
-    await updateJobState(jobState, jobStateRepository, job, lastProcessedUserId + 1);
+    await updateJobState();
   }
 }
 
@@ -215,12 +180,36 @@ async function saveRepos(reposData: GithubRepo[], updatedUsername: Username) {
   await reposService.createMultipleRepos(reposToSave);
 }
 
-async function updateJobState(jobState: JobState | null, jobStateRepository: any, job: Job, newLastProcessedUserId: number) {
-  if (jobState) {
-    jobState.lastProcessedUserId = newLastProcessedUserId;
-    await jobStateRepository.save(jobState);
+async function updateJobState() {
+  const getJobState = await JobState.findOne({ where: { jobName: 'refreshUsernames' } });
+  if (!getJobState) {
+    const newJobState = new JobState();
+    newJobState.jobName = 'refreshUsernames';
+    newJobState.lastProcessedUserId = 1;
+
+    await newJobState.save();
+
+    return;
   }
-  job.attrs.data = { lastProcessedUserId: newLastProcessedUserId };
+  getJobState.lastProcessedUserId += 1;
+  await getJobState.save();
+}
+
+async function getLastUserId() {
+  const job = await JobState.findOne({ where: { jobName: 'refreshUsernames' } });
+  if (!job) {
+    return 1;
+  }
+  return job.lastProcessedUserId;
+}
+
+async function resetJobState() {
+  const job = await JobState.findOne({ where: { jobName: 'refreshUsernames' } });
+  if (!job) {
+    return;
+  }
+  job.lastProcessedUserId = 0;
+  await job.save();
 }
 
 export default refreshUsernames;

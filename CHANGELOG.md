@@ -7,6 +7,7 @@
 - Refresh usernames cron Now checking for 409 response meaning empty repo
 - Refresh usernames cron Changed agenda to 12 seconds
 - Refresh usernames cron Handle 409 errors
+- Refresh usernames fixed how we retrieve last user ID
 
 ## 29/9/2024
 
