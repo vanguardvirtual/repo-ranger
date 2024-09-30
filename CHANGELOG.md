@@ -1,5 +1,11 @@
 # Changelog
 
+## 30/9/2024
+
+- Added types on props on refresh usernames
+- Removed multiple retires
+- Now checking for 409 response meaning empty repo
+
 ## 29/9/2024
 
 - Created new get last id function on username service
