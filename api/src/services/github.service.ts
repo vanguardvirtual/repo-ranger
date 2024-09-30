@@ -71,6 +71,7 @@ const getGithubUserCommits = async (username: string, repos: GithubRepo[]): Prom
       if (!repo) {
         continue;
       }
+
       const response = await axios.get(`https://api.github.com/repos/${username}/${repo.name}/commits?author=${username}&per_page=100`, {
         headers: {
           Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
@@ -87,7 +88,10 @@ const getGithubUserCommits = async (username: string, repos: GithubRepo[]): Prom
       }
     }
     return commits;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response.status === 409) {
+      return [];
+    }
     logger('error', JSON.stringify(error));
     throw new Error('Failed to get user data');
   }

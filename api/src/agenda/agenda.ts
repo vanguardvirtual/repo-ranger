@@ -26,7 +26,13 @@ export const startAgenda = async () => {
       logger('error', `Error in refresh usernames job: ${JSON.stringify(error)}`);
     }
   });
-  await agendaS.every('1 seconds', 'refresh usernames');
+
+  // We have a 5000 rate limit from Github Per Hour do 6 requests for each user
+  // But we also do additional 10 requests to fetch the events of the repos of the user
+  // In total we do 16 requests per user
+  // So we can update 312 users every hour, so the cron job will run every 10 seconds
+  // Add a 2 second markup to avoid rate limit from extra requests
+  await agendaS.every('12 seconds', 'refresh usernames');
 
   await agendaS.start();
   logger('info', 'Agenda started and tweet job scheduled');

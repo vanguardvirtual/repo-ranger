@@ -2,9 +2,11 @@
 
 ## 30/9/2024
 
-- Added types on props on refresh usernames
-- Removed multiple retires
-- Now checking for 409 response meaning empty repo
+- Refresh usernames cron Added types on props on refresh usernames
+- Refresh usernames cron Removed multiple retires
+- Refresh usernames cron Now checking for 409 response meaning empty repo
+- Refresh usernames cron Changed agenda to 12 seconds
+- Refresh usernames cron Handle 409 errors
 
 ## 29/9/2024
 
